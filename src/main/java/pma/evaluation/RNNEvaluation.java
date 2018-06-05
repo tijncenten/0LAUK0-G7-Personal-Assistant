@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -92,42 +93,26 @@ public class RNNEvaluation extends Evaluation implements Trainable, Storable {
         }
         
         double[] results = new double[messages.size()];
-
-        //WordVectors wordVectors = WordVectorSerializer.loadStaticModel(new File(WORD_VECTORS_PATH));
         
         MessageSetIterator input = new MessageSetIterator(messages, vec, batchSize, truncateReviewsToLength, false);
-        
+
+        INDArray networkOutput = net.output(input);
+
         for (int i = 0; i < messages.size(); i++) {
-            INDArray features = input.loadFeaturesFromString(messages.get(i).getText(), truncateReviewsToLength);
-            INDArray out = net.output(features);
-            
-            int timeSeriesLength = out.size(2);
-            INDArray probabilitiesAtLastWord = out.get(NDArrayIndex.point(0), NDArrayIndex.all(), NDArrayIndex.point(timeSeriesLength - 1));
-//            System.out.println(messages.get(i).getText());
-//            System.out.println(out);
-//            System.out.println(probabilitiesAtLastWord);
-//            
-//            System.out.println("\n-------------------------------");
-//            System.out.println("Message : \n" + messages.get(i).getText());
-//            System.out.println("Probabilities at last time step:");
-//            System.out.println("p(spam): " + probabilitiesAtLastWord.getDouble(0));
-//            System.out.println("p(ham): " + probabilitiesAtLastWord.getDouble(1));
+            INDArray row = networkOutput.getRow(i);
+            double pSpam = row.getRow(0).sumNumber().doubleValue();
+            double pHam = row.getRow(1).sumNumber().doubleValue();
             
             double prob;
-            if (probabilitiesAtLastWord.getDouble(0) > probabilitiesAtLastWord.getDouble(1)) {
-                prob = 1 - probabilitiesAtLastWord.getDouble(0);
+            if (pSpam > pHam) {
+                prob = 1 - pSpam;
             } else {
-                prob = probabilitiesAtLastWord.getDouble(1);
+                prob = pHam;
             }
             
             results[i] = prob;
         }
-
-//        INDArray networkOutput = net.output(input);
-//        System.out.println(networkOutput);
-//        int timeSeriesLength = networkOutput.size(2);
-//        INDArray probabilitiesAtLastWord = networkOutput.get(NDArrayIndex.point(0), NDArrayIndex.all(), NDArrayIndex.point(timeSeriesLength - 1));
-//        System.out.println(probabilitiesAtLastWord);
+        
         return results;
     }
 
@@ -173,6 +158,7 @@ public class RNNEvaluation extends Evaluation implements Trainable, Storable {
             System.out.println("Epoch " + i + " complete. Starting evaluation:");
             
             org.deeplearning4j.eval.Evaluation evaluation = net.evaluate(test);
+            test.reset();
             System.out.println(evaluation.stats());
         }
     }
