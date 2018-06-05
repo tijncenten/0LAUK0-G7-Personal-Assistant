@@ -83,7 +83,7 @@ public class RNNEvaluationTest {
         
         network.load("", "rnn300");
         
-        network.train(messages);
+        //network.train(messages);
         network.process(messages, new UserPreferences());
         //network.save("", "rnn300");
         

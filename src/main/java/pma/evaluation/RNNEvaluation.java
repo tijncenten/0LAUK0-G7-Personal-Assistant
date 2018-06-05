@@ -3,6 +3,7 @@ package pma.evaluation;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -28,6 +29,7 @@ import org.deeplearning4j.text.sentenceiterator.SentenceIterator;
 import org.deeplearning4j.text.tokenization.tokenizer.preprocessor.CommonPreprocessor;
 import org.deeplearning4j.text.tokenization.tokenizerfactory.DefaultTokenizerFactory;
 import org.deeplearning4j.text.tokenization.tokenizerfactory.TokenizerFactory;
+import org.deeplearning4j.util.ModelSerializer;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
@@ -168,12 +170,33 @@ public class RNNEvaluation extends Evaluation implements Trainable, Storable {
         if (vec == null) {
             throw new IllegalStateException("Cannot save since Word2Vec is null");
         }
+        
+        if (net == null) {
+            throw new IllegalStateException("Cannot save since net is null");
+        }
+        
+        // Save word vector
         WordVectorSerializer.writeWord2VecModel(vec, "pa-network-storage/" + name + ".word2vec.txt");
+        
+        try {
+            // Save RNN
+            ModelSerializer.writeModel(net, "pa-network-storage/" + name + ".rnn.txt", true);
+        } catch (IOException ex) {
+            Logger.getLogger(RNNEvaluation.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
     public void load(String path, String name) {
+        // Load word vector
         vec = WordVectorSerializer.readWord2VecModel("pa-network-storage/" + name + ".word2vec.txt");
+        
+        try {
+            // Load RNN
+            net = ModelSerializer.restoreMultiLayerNetwork("pa-network-storage/" + name + ".rnn.txt", true);
+        } catch (IOException ex) {
+            Logger.getLogger(RNNEvaluation.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
 }
