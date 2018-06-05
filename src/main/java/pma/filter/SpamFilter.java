@@ -2,6 +2,7 @@ package pma.filter;
 
 import pma.layer.Layer;
 import pma.PersonalMessagingAssistant.EvalResult;
+import pma.layer.LayerNetwork;
 import pma.message.Message;
 import pma.preferences.UserPreferences;
 
@@ -21,7 +22,7 @@ public class SpamFilter extends Filter {
     }
 
     @Override
-    protected boolean applyFilter(Message m, UserPreferences prefs) {
+    protected boolean applyFilter(Message m, LayerNetwork network) {
         // Dummy code filtering out all messages containing the word 'spam'
         boolean result = m.getText().contains("spam");
         

@@ -18,7 +18,7 @@ public class OutputLayer extends Layer {
     }
 
     @Override
-    protected void performTask(List<Message> messages, UserPreferences prefs) {
+    protected void performTask(List<Message> messages, LayerNetwork network) {
         this.messages.addAll(messages);
     }
     

@@ -3,6 +3,7 @@ package pma.filter;
 import java.util.ArrayList;
 import java.util.List;
 import pma.layer.Layer;
+import pma.layer.LayerNetwork;
 import pma.layer.OutputLayer;
 import pma.message.Message;
 import pma.preferences.UserPreferences;
@@ -34,11 +35,11 @@ public abstract class Filter extends Layer {
     }
     
     @Override
-    protected void performTask(List<Message> messages, UserPreferences prefs) {
+    protected void performTask(List<Message> messages, LayerNetwork network) {
         List<Message> filteredMessages = new ArrayList<>();
         
         for (Message m : messages) {
-            if (applyFilter(m, prefs)) {
+            if (applyFilter(m, network)) {
                 filteredMessages.add(m);
                 
                 if (alternativeLayer instanceof OutputLayer) {
@@ -54,7 +55,7 @@ public abstract class Filter extends Layer {
         }
         
         if (alternativeLayer != null) {
-            alternativeLayer.process(filteredMessages, prefs);
+            alternativeLayer.process(filteredMessages, network);
         }
     }
     
@@ -66,6 +67,6 @@ public abstract class Filter extends Layer {
      * @param m The message that is to be filtered
      * @return A boolean indicating if the filter activated
      */
-    protected abstract boolean applyFilter(Message m, UserPreferences prefs);
+    protected abstract boolean applyFilter(Message m, LayerNetwork network);
     
 }

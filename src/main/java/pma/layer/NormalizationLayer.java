@@ -19,7 +19,7 @@ import pma.utils.StringReplacer;
 public class NormalizationLayer extends Layer {
 
     @Override
-    protected void performTask(List<Message> messages, UserPreferences prefs) {
+    protected void performTask(List<Message> messages, LayerNetwork network) {
         for (Message m : messages) {
             preprocess(m);
         }

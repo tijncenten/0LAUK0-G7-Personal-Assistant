@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import pma.layer.Layer;
 import pma.PersonalMessagingAssistant.EvalResult;
+import pma.layer.LayerNetwork;
 import pma.layer.Storable;
 import pma.layer.Trainable;
 import pma.message.Message;
@@ -34,7 +35,7 @@ public class EvaluationLayer extends Layer implements Trainable, Storable {
     }
 
     @Override
-    protected void performTask(List<Message> messages, UserPreferences prefs) {
+    protected void performTask(List<Message> messages, LayerNetwork network) {
         double[][] results = new double[evaluations.size()][messages.size()];
         for (int i = 0; i < evaluations.size(); i++) {
             results[i] = evaluations.get(i).evaluate(messages);

@@ -22,9 +22,9 @@ public class ThreadLayer extends Layer {
     }
 
     @Override
-    protected void performTask(List<Message> messages, UserPreferences prefs) {
+    protected void performTask(List<Message> messages, LayerNetwork network) {
         ClusteringAlgorithm clusteringAlgorithm = new HierarchicalClustering(
-                (int) (messages.size() * prefs.getThreadDepthFactor()));
+                (int) (messages.size() * network.getPrefs().getThreadDepthFactor()));
         clusteringAlgorithm.cluster(messages);
     }
     

@@ -76,7 +76,7 @@ public class PreprocessingLayerTest {
         messages.add(new Message("any of you know the answer to question 5?", 21, contacts[1], false));
         messages.add(new Message("???", 30, contacts[1], true));
         
-        preprocessingLayer.process(messages, new UserPreferences());
+        preprocessingLayer.process(messages, new LayerNetwork());
         
         List<Message> outputlist = outputLayer.getOutput();
         for(Message output : outputlist){

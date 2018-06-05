@@ -14,7 +14,6 @@ import pma.evaluation.function.MaxEvaluationFunction;
 import pma.layer.LayerNetwork;
 import pma.layer.OutputLayer;
 import pma.message.Message;
-import pma.preferences.UserPreferences;
 
 /**
  *
@@ -84,7 +83,7 @@ public class RNNEvaluationTest {
         network.load("", "rnn300");
         
         //network.train(messages);
-        network.process(messages, new UserPreferences());
+        network.process(messages);
         //network.save("", "rnn300");
         
         List<Message> outputMessages = network.getOutputLayer().getOutput();

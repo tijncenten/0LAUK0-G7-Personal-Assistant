@@ -1,8 +1,8 @@
 package pma.layer;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import pma.feedback.FeedbackModule;
 import pma.message.Message;
 import pma.preferences.UserPreferences;
 
@@ -13,6 +13,8 @@ import pma.preferences.UserPreferences;
 public class LayerNetwork implements Trainable, Storable {
     
     LinkedList<Layer> layers = new LinkedList<>();
+    private UserPreferences prefs;
+    private FeedbackModule feedbackModule;
     
     public void addLayer(Layer layer) {
         if (!layers.isEmpty()) {
@@ -21,8 +23,8 @@ public class LayerNetwork implements Trainable, Storable {
         layers.add(layer);
     }
     
-    public void process(List<Message> messages, UserPreferences prefs) {
-        layers.getFirst().process(messages, prefs);
+    public void process(List<Message> messages) {
+        layers.getFirst().process(messages, this);
     }
     
     public OutputLayer getOutputLayer() {
@@ -32,6 +34,22 @@ public class LayerNetwork implements Trainable, Storable {
             }
         }
         throw new IllegalStateException("No outputlayer present");
+    }
+    
+    public UserPreferences getPrefs() {
+        return this.prefs;
+    }
+    
+    public void setPrefs(UserPreferences prefs) {
+        this.prefs = prefs;
+    }
+    
+    public FeedbackModule getFeedbackModule() {
+        return this.feedbackModule;
+    }
+    
+    public void setFeedbackModule(FeedbackModule feedbackModule) {
+        this.feedbackModule = feedbackModule;
     }
 
     @Override

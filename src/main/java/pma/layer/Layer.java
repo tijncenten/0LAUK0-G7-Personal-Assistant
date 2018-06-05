@@ -2,7 +2,6 @@ package pma.layer;
 
 import java.util.List;
 import pma.message.Message;
-import pma.preferences.UserPreferences;
 
 /**
  *
@@ -27,13 +26,13 @@ public abstract class Layer {
         this.childLayer = layer;
     }
     
-    public void process(List<Message> messages, UserPreferences prefs) {
-        performTask(messages, prefs);
+    public void process(List<Message> messages, LayerNetwork network) {
+        performTask(messages, network);
         if (childLayer != null) {
-            childLayer.process(messages, prefs);
+            childLayer.process(messages, network);
         }
     }
     
-    protected abstract void performTask(List<Message> messages, UserPreferences prefs);
+    protected abstract void performTask(List<Message> messages, LayerNetwork network);
     
 }

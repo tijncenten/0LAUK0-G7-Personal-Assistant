@@ -6,6 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import pma.layer.Layer;
 import pma.PersonalMessagingAssistant.EvalResult;
+import pma.layer.LayerNetwork;
 import pma.message.Message;
 import pma.preferences.UserPreferences;
 import pma.preferences.UserPreferences.CategorizationPrefs;
@@ -33,7 +34,7 @@ public class CategorizationFilter extends Filter {
     }
 
     @Override
-    protected boolean applyFilter(Message m, UserPreferences prefs) {
+    protected boolean applyFilter(Message m, LayerNetwork network) {
         int nrOfChars = m.getText().length();
         int nrOfWords = m.getText().split(" ").length;
         
@@ -59,7 +60,7 @@ public class CategorizationFilter extends Filter {
         }
 
         if (questionScore > 2) {
-            CategorizationPrefs questionPrefs = prefs.getQuestionPrefs();
+            CategorizationPrefs questionPrefs = network.getPrefs().getQuestionPrefs();
             if (null != questionPrefs) switch (questionPrefs) {
             case AUTO:
                 return false;
