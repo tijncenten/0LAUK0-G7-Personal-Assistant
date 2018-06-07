@@ -15,15 +15,14 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import pma.contact.Contact;
 import pma.message.Message;
-import pma.preferences.UserPreferences;
 
 /**
  *
  * @author s155538
  */
-public class PreprocessingLayerTest {
+public class NormalizationLayerTest {
     
-    public PreprocessingLayerTest() {
+    public NormalizationLayerTest() {
     }
     
     @BeforeClass
@@ -43,12 +42,14 @@ public class PreprocessingLayerTest {
     }
 
     /**
-     * Test of performTask method, of class PreprocessingLayer.
+     * Test of performTask method, of class NormalizationLayer.
      */
     @Test
     public void testPerformTask() {
         OutputLayer outputLayer = new OutputLayer();
-        Layer preprocessingLayer = new PreprocessingLayer(outputLayer);
+        Layer normalizationLayer = new NormalizationLayer(outputLayer);
+        Layer preprocessingLayer = new PreprocessingLayer(normalizationLayer);
+        
         
         
         Contact[] contacts = new Contact[] {
@@ -62,7 +63,7 @@ public class PreprocessingLayerTest {
         List<Message> messages = new ArrayList<>();
         messages.add(new Message("test", 0, contacts[0], true));
         messages.add(new Message("spam", 1, contacts[0], true));
-        messages.add(new Message("this is spam brb", 2, contacts[1], true));
+        messages.add(new Message("this is spam BRB.", 2, contacts[1], true));
         messages.add(new Message("real message", 3, contacts[3], true));
         messages.add(new Message("real good message", 4, contacts[2], true));
         messages.add(new Message("is this good?", 5, contacts[0], false));
