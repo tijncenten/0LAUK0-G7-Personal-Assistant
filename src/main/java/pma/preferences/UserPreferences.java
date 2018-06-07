@@ -6,6 +6,12 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import pma.feedback.FeedbackModule;
+import pma.feedback.FeedbackModule.FeedbackType;
+import pma.feedback.request.BlockRateFeedbackRequest;
+import pma.feedback.request.FeedbackNumberFeedbackRequest;
+import pma.feedback.request.ThreadDepthFeedbackRequest;
+import pma.layer.LayerNetwork;
 import pma.layer.Storable;
 
 /**
@@ -23,6 +29,10 @@ public class UserPreferences implements Storable {
     
     /** Thread preferences */
     private double threadDepthFactor = 0.75;
+    
+    /** Evaluation preferences */
+    private double evaluationThreshold = 0.5;
+    private double evaluationUncertainty = 0.05;
 
     public CategorizationPrefs getQuestionPrefs() {
         return questionPrefs;
@@ -60,7 +70,7 @@ public class UserPreferences implements Storable {
         return threadDepthFactor;
     }
 
-    public void decreaseThreadDepthFactor(double threadDepthFactor) {
+    public void decreaseThreadDepthFactor() {
         this.threadDepthFactor -= 0.1;
         this.threadDepthFactor = Math.max(Math.min(this.threadDepthFactor, 1), 0);
     }
@@ -68,6 +78,78 @@ public class UserPreferences implements Storable {
     public void increaseThreadDepthFactor() {
         this.threadDepthFactor += 0.1;
         this.threadDepthFactor = Math.max(Math.min(this.threadDepthFactor, 1), 0);
+    }
+    
+    public double getEvaluationThreshold() {
+        return evaluationThreshold;
+    }
+    
+    public double getEvaluationUncertainty() {
+        return evaluationUncertainty;
+    }
+    
+    private void decreaseEvaluationThreshold() {
+        this.evaluationThreshold -= 0.1;
+        this.evaluationThreshold = Math.max(Math.min(this.evaluationThreshold, 1), 0);
+    }
+    
+    private void increaseEvaluationThreshold() {
+        this.evaluationThreshold += 0.1;
+        this.evaluationThreshold = Math.max(Math.min(this.evaluationThreshold, 1), 0);
+    }
+    
+    private void decreaseEvaluationUncertainty() {
+        this.evaluationUncertainty /= 2;
+    }
+    
+    private void increaseEvaluationUncertainty() {
+        if (evaluationThreshold + evaluationUncertainty * 2 < 1 &&
+                evaluationThreshold - evaluationUncertainty * 2 > 0) {
+            this.evaluationUncertainty *= 2;
+        }
+    }
+    
+    public void build(LayerNetwork network) {
+        FeedbackModule fm = network.getFeedbackModule();
+        
+        fm.addFeedbackListener(FeedbackType.BLOCK_RATE, (request) -> {
+            BlockRateFeedbackRequest req = (BlockRateFeedbackRequest) request;
+            int result = req.getResult();
+            switch (result) {
+            case 1:
+                increaseEvaluationThreshold();
+                break;
+            case -1:
+                decreaseEvaluationThreshold();
+                break;
+            }
+        });
+        
+        fm.addFeedbackListener(FeedbackType.NR_FEEDBACK, (request) -> {
+            FeedbackNumberFeedbackRequest req = (FeedbackNumberFeedbackRequest) request;
+            int result = req.getResult();
+            switch (result) {
+            case 1:
+                increaseEvaluationUncertainty();
+                break;
+            case -1:
+                decreaseEvaluationUncertainty();
+                break;
+            }
+        });
+        
+        fm.addFeedbackListener(FeedbackType.THREAD_DEPTH, (request) -> {
+            ThreadDepthFeedbackRequest req = (ThreadDepthFeedbackRequest) request;
+            int result = req.getResult();
+            switch (result) {
+            case 1:
+                increaseThreadDepthFactor();
+                break;
+            case -1:
+                decreaseThreadDepthFactor();
+                break;
+            }
+        });
     }
     
     @Override
@@ -83,7 +165,9 @@ public class UserPreferences implements Storable {
             writer.write("answerCategorizationPrefs:" + answerPrefs.name() + "\n");
             writer.write("announcementCategorizationPrefs:" + announcementPrefs.name() + "\n");
             writer.write("confirmationCategorizationPrefs:" + confirmationPrefs.name() + "\n");
-            writer.write("threadDepthFactor:" + threadDepthFactor);
+            writer.write("threadDepthFactor:" + threadDepthFactor + "\n");
+            writer.write("evaluationThreshold:" + evaluationThreshold + "\n");
+            writer.write("evaluationUncertainty:" + evaluationUncertainty);
             
             writer.close();
         } catch (IOException ex) {
@@ -117,6 +201,12 @@ public class UserPreferences implements Storable {
                     break;
                 case "threadDepthFactor":
                     this.threadDepthFactor = Double.parseDouble(lineSplit[1]);
+                    break;
+                case "evaluationThreshold":
+                    this.evaluationThreshold = Double.parseDouble(lineSplit[1]);
+                    break;
+                case "evaluationUncertainty":
+                    this.evaluationUncertainty = Double.parseDouble(lineSplit[1]);
                 }
             }
             

@@ -26,6 +26,14 @@ public class Message {
         this.sender = sender;
     }
     
+    public Message(Message original, boolean spam) {
+        this.text = original.getText();
+        this.timestamp = original.getTimestamp();
+        this.sender = original.getSender();
+        this.result = original.getResult();
+        this.spam = spam;
+    }
+    
     public Message(String text, long timestamp, Contact sender, boolean spam) {
         this.text = text;
         this.timestamp = timestamp;

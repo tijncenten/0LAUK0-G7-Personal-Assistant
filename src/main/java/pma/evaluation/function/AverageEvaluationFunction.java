@@ -1,11 +1,10 @@
 package pma.evaluation.function;
 
-
 /**
  *
  * @author s167501
  */
-public class MaxEvaluationFunction extends EvaluationFunction {
+public class AverageEvaluationFunction extends EvaluationFunction {
 
     @Override
     public double[] calculate(double[][] values) {
@@ -13,12 +12,12 @@ public class MaxEvaluationFunction extends EvaluationFunction {
         double[] results = new double[nrMessages];
         
         for (int i = 0; i < nrMessages; i++) {
-            double maxValue = 0;
+            double total = 0;
             for (int j = 0; j < values.length; j++) {
-                double value = values[j][i];
-                maxValue = Math.max(maxValue, value);
+                total += values[j][i];
             }
-            results[i] = maxValue;
+            // Store the average in results
+            results[i] = total / values.length;
         }
         
         return results;

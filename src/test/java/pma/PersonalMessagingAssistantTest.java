@@ -72,8 +72,9 @@ public class PersonalMessagingAssistantTest {
         messages.add(new Message("???", 30, contacts[1], true));
         PersonalMessagingAssistant instance = new PersonalMessagingAssistant();
         //instance.train(messages);
-        instance.load("", "test2");
+        instance.load("", "test3");
         instance.process(messages);
+        //instance.save("", "test3");
         // TODO review the generated test code and remove the default call to fail.
         //fail("The test case is a prototype.");
     }

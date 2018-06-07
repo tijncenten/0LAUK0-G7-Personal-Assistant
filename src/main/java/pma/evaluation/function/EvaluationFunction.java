@@ -1,6 +1,5 @@
 package pma.evaluation.function;
 
-import pma.PersonalMessagingAssistant.EvalResult;
 
 /**
  *
@@ -8,6 +7,6 @@ import pma.PersonalMessagingAssistant.EvalResult;
  */
 public abstract class EvaluationFunction {
     
-    public abstract EvalResult[] calculate(double[][] values);
+    public abstract double[] calculate(double[][] values);
     
 }

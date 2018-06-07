@@ -8,6 +8,7 @@ import pma.evaluation.function.EvaluationFunction;
 import pma.evaluation.EvaluationLayer;
 import pma.evaluation.KeywordEvaluation;
 import pma.evaluation.function.MaxEvaluationFunction;
+import pma.feedback.AutoFeedbackEvaluator;
 import pma.feedback.FeedbackModule;
 import pma.filter.CategorizationFilter;
 import pma.filter.Filter;
@@ -45,6 +46,8 @@ public class PersonalMessagingAssistant implements Trainable, Storable {
         network.setPrefs(prefs);
         network.setFeedbackModule(feedbackModule);
         
+        feedbackModule.setFeedbackEvaluator(new AutoFeedbackEvaluator());
+        
         network.addLayer(new PreprocessingLayer());
         //network.addLayer(new SpamFilter(output));
         network.addLayer(new ThreadLayer());
@@ -58,6 +61,8 @@ public class PersonalMessagingAssistant implements Trainable, Storable {
         
         network.addLayer(evalLayer);
         network.addLayer(output);
+        
+        network.build();
     }
     
     protected EvalResult[] process(List<Message> messages) {
