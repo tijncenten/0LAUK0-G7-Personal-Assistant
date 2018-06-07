@@ -16,7 +16,12 @@ public class LayerNetwork implements Trainable, Storable {
     private UserPreferences prefs;
     private FeedbackModule feedbackModule;
     
+    private boolean isBuilt = false;
+    
     public void addLayer(Layer layer) {
+        if (isBuilt) {
+            throw new IllegalStateException("Layer network is already built");
+        }
         if (!layers.isEmpty()) {
             layers.getLast().setChildLayer(layer);
         }
@@ -24,10 +29,16 @@ public class LayerNetwork implements Trainable, Storable {
     }
     
     public void process(List<Message> messages) {
+        if (!isBuilt) {
+            throw new IllegalStateException("Layer network is not built yet");
+        }
         layers.getFirst().process(messages, this);
     }
     
     public OutputLayer getOutputLayer() {
+        if (!isBuilt) {
+            throw new IllegalStateException("Layer network is not built yet");
+        }
         for (Layer l : layers) {
             if (l instanceof OutputLayer) {
                 return (OutputLayer) l;
@@ -41,6 +52,9 @@ public class LayerNetwork implements Trainable, Storable {
     }
     
     public void setPrefs(UserPreferences prefs) {
+        if (isBuilt) {
+            throw new IllegalStateException("Layer network is already built");
+        }
         this.prefs = prefs;
     }
     
@@ -49,11 +63,31 @@ public class LayerNetwork implements Trainable, Storable {
     }
     
     public void setFeedbackModule(FeedbackModule feedbackModule) {
+        if (isBuilt) {
+            throw new IllegalStateException("Layer network is already built");
+        }
         this.feedbackModule = feedbackModule;
+    }
+    
+    public void build() {
+        if (isBuilt) {
+            throw new IllegalStateException("Layer network is already built");
+        }
+        
+        for (Layer l : layers) {
+            l.build(this);
+        }
+        prefs.build(this);
+        
+        isBuilt = true;
     }
 
     @Override
     public void train(List<Message> messages) {
+        if (!isBuilt) {
+            throw new IllegalStateException("Layer network is not built yet");
+        }
+        
         for (Layer l : layers) {
             if (l instanceof Trainable) {
                 Trainable t = (Trainable) l;
@@ -64,6 +98,10 @@ public class LayerNetwork implements Trainable, Storable {
     
     @Override
     public void save(String path, String name) {
+        if (!isBuilt) {
+            throw new IllegalStateException("Layer network is not built yet");
+        }
+        
         for (Layer l : layers) {
             if (l instanceof Storable) {
                 Storable s = (Storable) l;
@@ -74,6 +112,10 @@ public class LayerNetwork implements Trainable, Storable {
 
     @Override
     public void load(String path, String name) {
+        if (!isBuilt) {
+            throw new IllegalStateException("Layer network is not built yet");
+        }
+        
         for (Layer l : layers) {
             if (l instanceof Storable) {
                 Storable s = (Storable) l;

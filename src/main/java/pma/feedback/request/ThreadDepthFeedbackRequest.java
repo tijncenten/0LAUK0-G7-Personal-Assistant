@@ -28,4 +28,21 @@ public class ThreadDepthFeedbackRequest extends FeedbackRequest {
         return FeedbackType.THREAD_DEPTH;
     }
     
+    /**
+     * Returns -1 when too few threads are created, 1 when too many threads
+     * and 0 otherwise
+     * 
+     * @return 
+     */
+    public int getResult() {
+        switch (this.getFeedback()) {
+        case "TOO FEW":
+            return -1;
+        case "TOO MANY":
+            return 1;
+        default:
+            return 0;
+        }
+    }
+    
 }

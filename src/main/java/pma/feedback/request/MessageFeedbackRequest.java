@@ -22,7 +22,7 @@ public class MessageFeedbackRequest extends FeedbackRequest {
 
     @Override
     public String getSubTitle() {
-        return message.getText();
+        return message.getSender() + ": " + message.getText();
     }
 
     @Override
@@ -33,6 +33,14 @@ public class MessageFeedbackRequest extends FeedbackRequest {
     @Override
     public FeedbackType getFeedbackType() {
         return FeedbackType.MESSAGE_IMPORTANCE;
+    }
+    
+    public Message getMessage() {
+        return this.message;
+    }
+    
+    public boolean isSpam() {
+        return this.getFeedback().equals("NOT USEFULL");
     }
     
 }

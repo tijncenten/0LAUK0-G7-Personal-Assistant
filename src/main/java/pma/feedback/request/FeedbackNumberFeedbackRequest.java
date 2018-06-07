@@ -28,4 +28,21 @@ public class FeedbackNumberFeedbackRequest extends FeedbackRequest {
         return FeedbackType.NR_FEEDBACK;
     }
     
+    /**
+     * Returns -1 when feedback should lower, 1 when feedback should increase,
+     * 0 otherwise
+     * 
+     * @return 
+     */
+    public int getResult() {
+        switch (this.getFeedback()) {
+        case "TOO MANY":
+            return -1;
+        case "TOO FEW":
+            return 1;
+        default:
+            return 0;
+        }
+    }
+    
 }

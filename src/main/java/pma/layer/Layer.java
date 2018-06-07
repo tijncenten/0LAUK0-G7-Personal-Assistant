@@ -13,6 +13,7 @@ import pma.message.Message;
 public abstract class Layer {
     
     protected Layer childLayer;
+    protected LayerNetwork layerNetwork;
     
     public Layer(Layer childLayer) {
         this.childLayer = childLayer;
@@ -24,6 +25,10 @@ public abstract class Layer {
     
     public void setChildLayer(Layer layer) {
         this.childLayer = layer;
+    }
+    
+    public void build(LayerNetwork network) {
+        
     }
     
     public void process(List<Message> messages, LayerNetwork network) {

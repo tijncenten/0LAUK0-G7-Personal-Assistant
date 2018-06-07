@@ -1,6 +1,5 @@
 package pma.evaluation.function;
 
-import pma.PersonalMessagingAssistant.EvalResult;
 
 /**
  *
@@ -9,9 +8,9 @@ import pma.PersonalMessagingAssistant.EvalResult;
 public class MaxEvaluationFunction extends EvaluationFunction {
 
     @Override
-    public EvalResult[] calculate(double[][] values) {
+    public double[] calculate(double[][] values) {
         int nrMessages = values[0].length;
-        EvalResult[] results = new EvalResult[nrMessages];
+        double[] results = new double[nrMessages];
         
         for (int i = 0; i < nrMessages; i++) {
             double maxValue = 0;
@@ -19,12 +18,7 @@ public class MaxEvaluationFunction extends EvaluationFunction {
                 double value = values[j][i];
                 maxValue = Math.max(maxValue, value);
             }
-            
-            if (maxValue > 0.5) {
-                results[i] = EvalResult.high;
-            } else {
-                results[i] = EvalResult.low;
-            }
+            results[i] = maxValue;
         }
         
         return results;

@@ -28,4 +28,20 @@ public class BlockRateFeedbackRequest extends FeedbackRequest {
         return FeedbackType.BLOCK_RATE;
     }
     
+    /**
+     * Returns -1 when threshold should lower, 1 when increased and 0 otherwise
+     * 
+     * @return 
+     */
+    public int getResult() {
+        switch (this.getFeedback()) {
+        case "MORE":
+            return -1;
+        case "LESS":
+            return 1;
+        default:
+            return 0;
+        }
+    }
+    
 }

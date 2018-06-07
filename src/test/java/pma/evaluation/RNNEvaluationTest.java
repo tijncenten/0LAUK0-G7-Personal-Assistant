@@ -11,9 +11,12 @@ import static org.junit.Assert.*;
 import pma.contact.Contact;
 import pma.evaluation.function.EvaluationFunction;
 import pma.evaluation.function.MaxEvaluationFunction;
+import pma.feedback.AutoFeedbackEvaluator;
+import pma.feedback.FeedbackModule;
 import pma.layer.LayerNetwork;
 import pma.layer.OutputLayer;
 import pma.message.Message;
+import pma.preferences.UserPreferences;
 
 /**
  *
@@ -71,6 +74,10 @@ public class RNNEvaluationTest {
         
         
         LayerNetwork network = new LayerNetwork();
+        network.setPrefs(new UserPreferences());
+        FeedbackModule feedbackModule = new FeedbackModule();
+        feedbackModule.setFeedbackEvaluator(new AutoFeedbackEvaluator());
+        network.setFeedbackModule(feedbackModule);
         
         EvaluationFunction evalFunc = new MaxEvaluationFunction();
         EvaluationLayer evalLayer = new EvaluationLayer(evalFunc);
@@ -79,6 +86,8 @@ public class RNNEvaluationTest {
         network.addLayer(evalLayer);
         OutputLayer output = new OutputLayer();
         network.addLayer(output);
+        
+        network.build();
         
         network.load("", "rnn300");
         
