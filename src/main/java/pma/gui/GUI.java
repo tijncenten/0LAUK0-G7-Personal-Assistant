@@ -20,6 +20,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import pma.PersonalMessagingAssistant;
+import pma.PersonalMessagingAssistant.EvalResult;
 import pma.chatparsers.MessageParser;
 import pma.message.Message;
 
@@ -37,34 +38,18 @@ public class GUI extends javax.swing.JFrame {
     private PersonalMessagingAssistant pa;
     private MessageParser mp;
     private int batchSize = 200;
+    
+    //private JMessageList messageList = new JMessageList();
 
     /**
      * Creates new form GUI
      */
     public GUI() {
         initComponents();
+        //jCenterPanel.add(messageList);
         mp = new MessageParser();
         pa = new PersonalMessagingAssistant(mp, batchSize);
         pa.load("", "emre-es3");
-    }
-    
-    private static JScrollPane getList() {
-        JPanel panel = new JPanel(new GridBagLayout());
-        
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = gbc.gridy = 0;
-        for (int i = 0; i < 5; i++) {
-            panel.add(panel(), gbc);
-            gbc.gridy++;
-        }
-        return new JScrollPane(panel);
-    }
-    
-    private static JPanel panel() {
-        JPanel panel = new JPanel();
-        JCheckBox cbox = new JCheckBox();
-        panel.add(cbox);
-        return panel;
     }
 
     /**
@@ -91,6 +76,7 @@ public class GUI extends javax.swing.JFrame {
         jRadioButton2 = new javax.swing.JRadioButton();
         jRadioButton3 = new javax.swing.JRadioButton();
         jCenterPanel = new javax.swing.JPanel();
+        jMessageList = new pma.gui.JMessageList();
 
         jCheckBox3.setSelected(true);
         jCheckBox3.setText("Chat analysis complete");
@@ -172,11 +158,11 @@ public class GUI extends javax.swing.JFrame {
         jCenterPanel.setLayout(jCenterPanelLayout);
         jCenterPanelLayout.setHorizontalGroup(
             jCenterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addComponent(jMessageList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jCenterPanelLayout.setVerticalGroup(
             jCenterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 423, Short.MAX_VALUE)
+            .addComponent(jMessageList, javax.swing.GroupLayout.DEFAULT_SIZE, 423, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -260,15 +246,11 @@ public class GUI extends javax.swing.JFrame {
             selectedFile = fc.getSelectedFile();
             
             try {
-                GridBagConstraints gbc = new GridBagConstraints();
-                
                 List<Message> messages = mp.parse(selectedFile);
+                jMessageList.clear();
                 for (Message m : messages) {
-                    
-                    //jScrollPanel.add(new JMessagePanel(m));
+                    jMessageList.addMessage(m);
                 }
-
-                this.repaint();
                 
                 /*
                 BufferedReader br = null;
@@ -318,13 +300,25 @@ public class GUI extends javax.swing.JFrame {
      */
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         
-        /** 
-         * This button does 2 things for now:
-         * 
-         * 1. Show a random fake score that was assigned to the chat/thread
-         * 2. Show a fake popup dialog that confirms the analysis has been
-         * completed
-         */    
+        EvalResult[] results = null;
+        
+        try {
+            /**
+             * This button does 2 things for now:
+             *
+             * 1. Show a random fake score that was assigned to the chat/thread
+             * 2. Show a fake popup dialog that confirms the analysis has been
+             * completed
+             */
+            
+            results = pa.process(selectedFile);
+            jMessageList.setResults(results);
+            
+        } catch (ParseException | FileNotFoundException ex) {
+            ex.printStackTrace();
+        }
+        
+        
         
         // 1. Show random fake score in the main GUI
         Random r = new Random();
@@ -404,6 +398,7 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
     private javax.swing.JDialog jDialog1;
+    private pma.gui.JMessageList jMessageList;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JProgressBar jProgressBar1;
