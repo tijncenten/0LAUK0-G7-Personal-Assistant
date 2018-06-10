@@ -164,7 +164,7 @@ public class RNNEvaluation extends Evaluation implements Trainable, Storable {
             System.out.println(evaluation.stats());
         }
     }
-
+    
     @Override
     public void save(String path, String name) {
         if (vec == null) {

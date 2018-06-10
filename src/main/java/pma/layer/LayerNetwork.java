@@ -2,6 +2,8 @@ package pma.layer;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import pma.feedback.FeedbackModule;
 import pma.message.Message;
 import pma.preferences.UserPreferences;
@@ -16,6 +18,8 @@ public class LayerNetwork implements Trainable, Storable {
     private UserPreferences prefs;
     private FeedbackModule feedbackModule;
     
+    private LinkedList<Layer> trainLayers = new LinkedList<>();
+    
     private boolean isBuilt = false;
     
     public void addLayer(Layer layer) {
@@ -26,6 +30,25 @@ public class LayerNetwork implements Trainable, Storable {
             layers.getLast().setChildLayer(layer);
         }
         layers.add(layer);
+        
+        if (layer instanceof PreprocessingLayer || layer instanceof NormalizationLayer) {
+            Class<? extends Layer> preClass = layer.getClass();
+            try {
+                addTrainLayer(preClass.newInstance());
+            } catch (InstantiationException | IllegalAccessException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+    
+    private void addTrainLayer(Layer layer) {
+        if (isBuilt) {
+            throw new IllegalStateException("Layer network is already built");
+        }
+        if (!trainLayers.isEmpty()) {
+            trainLayers.getLast().setChildLayer(layer);
+        }
+        trainLayers.add(layer);
     }
     
     public void process(List<Message> messages) {
@@ -40,6 +63,18 @@ public class LayerNetwork implements Trainable, Storable {
             throw new IllegalStateException("Layer network is not built yet");
         }
         for (Layer l : layers) {
+            if (l instanceof OutputLayer) {
+                return (OutputLayer) l;
+            }
+        }
+        throw new IllegalStateException("No outputlayer present");
+    }
+    
+    private OutputLayer getTrainOutputLayer() {
+        if (!isBuilt) {
+            throw new IllegalStateException("Layer network is not built yet");
+        }
+        for (Layer l : trainLayers) {
             if (l instanceof OutputLayer) {
                 return (OutputLayer) l;
             }
@@ -74,6 +109,8 @@ public class LayerNetwork implements Trainable, Storable {
             throw new IllegalStateException("Layer network is already built");
         }
         
+        addTrainLayer(new OutputLayer());
+        
         for (Layer l : layers) {
             l.build(this);
         }
@@ -87,6 +124,10 @@ public class LayerNetwork implements Trainable, Storable {
         if (!isBuilt) {
             throw new IllegalStateException("Layer network is not built yet");
         }
+        
+        // Preprocess the messages for training
+        trainLayers.getFirst().process(messages, this);
+        messages = getTrainOutputLayer().getOutput();
         
         for (Layer l : layers) {
             if (l instanceof Trainable) {

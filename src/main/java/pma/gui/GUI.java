@@ -1,16 +1,27 @@
-package gui.pa;
+package pma.gui;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.BoxLayout;
+import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
-import parser.MessageParser;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import pma.PersonalMessagingAssistant;
+import pma.chatparsers.MessageParser;
+import pma.message.Message;
 
 /**
  *
@@ -21,12 +32,39 @@ import parser.MessageParser;
  *
  */
 public class GUI extends javax.swing.JFrame {
+    
+    private File selectedFile;
+    private PersonalMessagingAssistant pa;
+    private MessageParser mp;
+    private int batchSize = 200;
 
     /**
      * Creates new form GUI
      */
     public GUI() {
         initComponents();
+        mp = new MessageParser();
+        pa = new PersonalMessagingAssistant(mp, batchSize);
+        pa.load("", "emre-es3");
+    }
+    
+    private static JScrollPane getList() {
+        JPanel panel = new JPanel(new GridBagLayout());
+        
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = gbc.gridy = 0;
+        for (int i = 0; i < 5; i++) {
+            panel.add(panel(), gbc);
+            gbc.gridy++;
+        }
+        return new JScrollPane(panel);
+    }
+    
+    private static JPanel panel() {
+        JPanel panel = new JPanel();
+        JCheckBox cbox = new JCheckBox();
+        panel.add(cbox);
+        return panel;
     }
 
     /**
@@ -41,9 +79,8 @@ public class GUI extends javax.swing.JFrame {
         jDialog1 = new javax.swing.JDialog();
         jCheckBox3 = new javax.swing.JCheckBox();
         buttonGroup1 = new javax.swing.ButtonGroup();
+        jPanel2 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jCheckBox1 = new javax.swing.JCheckBox();
@@ -53,6 +90,7 @@ public class GUI extends javax.swing.JFrame {
         jRadioButton1 = new javax.swing.JRadioButton();
         jRadioButton2 = new javax.swing.JRadioButton();
         jRadioButton3 = new javax.swing.JRadioButton();
+        jCenterPanel = new javax.swing.JPanel();
 
         jCheckBox3.setSelected(true);
         jCheckBox3.setText("Chat analysis complete");
@@ -74,11 +112,18 @@ public class GUI extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jButton1.setText("Import Chat");
         jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -123,6 +168,17 @@ public class GUI extends javax.swing.JFrame {
 
         jRadioButton3.setText("High");
 
+        javax.swing.GroupLayout jCenterPanelLayout = new javax.swing.GroupLayout(jCenterPanel);
+        jCenterPanel.setLayout(jCenterPanelLayout);
+        jCenterPanelLayout.setHorizontalGroup(
+            jCenterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jCenterPanelLayout.setVerticalGroup(
+            jCenterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 423, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -137,7 +193,6 @@ public class GUI extends javax.swing.JFrame {
                         .addComponent(jCheckBox2)
                         .addGap(84, 84, 84)
                         .addComponent(jButton2))
-                    .addComponent(jScrollPane1)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 21, Short.MAX_VALUE)
                         .addComponent(score)
@@ -150,7 +205,8 @@ public class GUI extends javax.swing.JFrame {
                                 .addComponent(jRadioButton2)
                                 .addGap(131, 131, 131)
                                 .addComponent(jRadioButton3)
-                                .addGap(126, 126, 126)))))
+                                .addGap(126, 126, 126))))
+                    .addComponent(jCenterPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -162,8 +218,8 @@ public class GUI extends javax.swing.JFrame {
                     .addComponent(jCheckBox2)
                     .addComponent(jButton2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jCenterPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(score))
@@ -201,11 +257,18 @@ public class GUI extends javax.swing.JFrame {
         JFileChooser fc = new JFileChooser();
         int ret = fc.showOpenDialog(this);
         if (ret == JFileChooser.APPROVE_OPTION) {
-            File f = fc.getSelectedFile();
+            selectedFile = fc.getSelectedFile();
             
-            MessageParser mp = new MessageParser(f);
             try {
-                mp.parse();
+                GridBagConstraints gbc = new GridBagConstraints();
+                
+                List<Message> messages = mp.parse(selectedFile);
+                for (Message m : messages) {
+                    
+                    //jScrollPanel.add(new JMessagePanel(m));
+                }
+
+                this.repaint();
                 
                 /*
                 BufferedReader br = null;
@@ -236,10 +299,8 @@ public class GUI extends javax.swing.JFrame {
                 }
                 }
                 */
-            } catch (ParseException ex) {
-                Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ParseException | FileNotFoundException ex) {
+                ex.printStackTrace();
             }
         }
             
@@ -338,17 +399,17 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JPanel jCenterPanel;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JRadioButton jRadioButton3;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JLabel score;
     // End of variables declaration//GEN-END:variables
 }

@@ -1,13 +1,19 @@
 package pma.evaluation;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import pma.chatparsers.MessageParser;
 import pma.contact.Contact;
 import pma.evaluation.function.EvaluationFunction;
 import pma.evaluation.function.MaxEvaluationFunction;
@@ -89,11 +95,19 @@ public class RNNEvaluationTest {
         
         network.build();
         
-        network.load("", "rnn300");
+        //network.load("", "rnn300");
         
         //network.train(messages);
-        network.process(messages);
-        //network.save("", "rnn300");
+        MessageParser mp = new MessageParser();
+        try {
+            network.train(mp.parse(new File("chats/jodi-linear.txt")));
+            network.process(mp.parse(new File("chats/jodi-linear.txt")));
+            //network.save("", "rnn300");
+        } catch (ParseException ex) {
+            Logger.getLogger(RNNEvaluationTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(RNNEvaluationTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         List<Message> outputMessages = network.getOutputLayer().getOutput();
         for (Message m : outputMessages) {

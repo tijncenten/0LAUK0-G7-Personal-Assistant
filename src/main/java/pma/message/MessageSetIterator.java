@@ -3,6 +3,7 @@ package pma.message;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
 import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer;
@@ -80,7 +81,7 @@ public class MessageSetIterator implements DataSetIterator {
         }
         
         if (maxLength > truncateLength) maxLength = truncateLength;
-        
+                
         // Create data for training
         INDArray features = Nd4j.create(new int[]{msgs.size(), vectorSize, maxLength}, 'f');
         INDArray labels = Nd4j.create(new int[]{msgs.size(), 2, maxLength}, 'f');
@@ -92,20 +93,17 @@ public class MessageSetIterator implements DataSetIterator {
             
             int seqLength = Math.min(tokens.size(), maxLength);
             List<String> subList = tokens.subList(0, seqLength);
-//            if (subList.isEmpty()) {
-//                continue;
-//            }
             
             if (!subList.isEmpty()) {
                 INDArray vectors = wordVectors.getWordVectors(subList).transpose();
             
-            features.put(
-                new INDArrayIndex[] {
-                    NDArrayIndex.point(i), NDArrayIndex.all(), NDArrayIndex.interval(0, seqLength)
-                },
-                    vectors);
+                features.put(
+                    new INDArrayIndex[] {
+                        NDArrayIndex.point(i), NDArrayIndex.all(), NDArrayIndex.interval(0, seqLength)
+                    },
+                        vectors);
             
-            featuresMask.get(new INDArrayIndex[] {NDArrayIndex.point(i), NDArrayIndex.interval(0, seqLength)}).assign(1);
+                featuresMask.get(new INDArrayIndex[] {NDArrayIndex.point(i), NDArrayIndex.interval(0, seqLength)}).assign(1);
             }
             
             int idx = (spam[i] ? 0 : 1);

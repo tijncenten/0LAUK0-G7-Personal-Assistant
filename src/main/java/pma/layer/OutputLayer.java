@@ -26,7 +26,9 @@ public class OutputLayer extends Layer {
         messages.sort((o1, o2) -> {
             return (int) (o1.getTimestamp() - o2.getTimestamp()); //To change body of generated lambdas, choose Tools | Templates.
         });
-        return messages;
+        List<Message> stored = messages;
+        messages = new ArrayList<>();
+        return stored;
     }
     
 }

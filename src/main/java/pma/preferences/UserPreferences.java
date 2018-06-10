@@ -22,7 +22,7 @@ public class UserPreferences implements Storable {
     
     /** Categorization preferences */
     public enum CategorizationPrefs {BLOCK, AUTO, ALLOW};
-    private CategorizationPrefs questionPrefs = CategorizationPrefs.BLOCK;
+    private CategorizationPrefs questionPrefs = CategorizationPrefs.AUTO;
     private CategorizationPrefs answerPrefs = CategorizationPrefs.AUTO;
     private CategorizationPrefs announcementPrefs = CategorizationPrefs.AUTO;
     private CategorizationPrefs confirmationPrefs = CategorizationPrefs.AUTO;
@@ -32,7 +32,7 @@ public class UserPreferences implements Storable {
     
     /** Evaluation preferences */
     private double evaluationThreshold = 0.5;
-    private double evaluationUncertainty = 0.05;
+    private double evaluationUncertainty = 0.0;
 
     public CategorizationPrefs getQuestionPrefs() {
         return questionPrefs;

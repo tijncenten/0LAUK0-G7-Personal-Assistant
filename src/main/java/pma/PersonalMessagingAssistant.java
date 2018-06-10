@@ -1,12 +1,19 @@
 package pma;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
+import pma.chatparsers.MessageParser;
 import pma.evaluation.BayesianEvaluation;
 import pma.evaluation.Evaluation;
 import pma.layer.OutputLayer;
 import pma.evaluation.function.EvaluationFunction;
 import pma.evaluation.EvaluationLayer;
 import pma.evaluation.KeywordEvaluation;
+import pma.evaluation.RNNEvaluation;
+import pma.evaluation.function.AverageEvaluationFunction;
 import pma.evaluation.function.MaxEvaluationFunction;
 import pma.feedback.AutoFeedbackEvaluator;
 import pma.feedback.FeedbackModule;
@@ -34,9 +41,14 @@ public class PersonalMessagingAssistant implements Trainable, Storable {
     private LayerNetwork network;
     private UserPreferences prefs = new UserPreferences();
     private FeedbackModule feedbackModule = new FeedbackModule();
+    
+    private final MessageParser parser;
+    private final int batchSize;
 
-    public PersonalMessagingAssistant() {
+    public PersonalMessagingAssistant(MessageParser parser, int batchSize) {
         constructNetwork();
+        this.parser = parser;
+        this.batchSize = batchSize;
     }
     
     private void constructNetwork() {
@@ -54,10 +66,12 @@ public class PersonalMessagingAssistant implements Trainable, Storable {
         network.addLayer(new CategorizationFilter(output));
         network.addLayer(new NormalizationLayer());
         
-        EvaluationFunction evalFunc = new MaxEvaluationFunction();
+        EvaluationFunction evalFunc = new AverageEvaluationFunction();
         EvaluationLayer evalLayer = new EvaluationLayer(evalFunc);
         BayesianEvaluation evaluation = new BayesianEvaluation();
+        //RNNEvaluation rnnEvaluation = new RNNEvaluation();
         evalLayer.addEvaluation(evaluation);
+        //evalLayer.addEvaluation(rnnEvaluation);
         
         network.addLayer(evalLayer);
         network.addLayer(output);
@@ -69,11 +83,23 @@ public class PersonalMessagingAssistant implements Trainable, Storable {
         
         int numberOfMessages = messages.size();
 
-        network.process(messages);
+        int iterations = (int) Math.ceil(numberOfMessages * 1. / batchSize);
+        
+        List<Message> outputMessages = new ArrayList<>();
+        for (int i = 0; i < iterations; i++) {
+            int start = i * batchSize;
+            int end = (i+1) * batchSize;
+            if (end > messages.size()) {
+                end = messages.size();
+            }
+            network.process(new ArrayList<>(messages.subList(start, end)));
+            
+            outputMessages.addAll(network.getOutputLayer().getOutput());
+        }
+        
         
         //System.out.println(evaluation.save("bayesian"));
-        
-        List<Message> outputMessages = network.getOutputLayer().getOutput();
+
         for (Message m : outputMessages) {
             System.out.println(m);
         }
@@ -97,13 +123,21 @@ public class PersonalMessagingAssistant implements Trainable, Storable {
         return results;
     }
     
+    public EvalResult[] process(File f) throws ParseException, FileNotFoundException {
+        return this.process(parser.parse(f));
+    }
+    
     public static void calculateAccuracy(List<Message> messages) {
         int truePositives = 0;
         int trueNegatives = 0;
         int falsePositives = 0;
         int falseNegatives = 0;
+        int count = 0;
         
         for (Message m : messages) {
+            if (m.isSpam() == null) {
+                continue;
+            }
             if (m.isSpam()) {
                 if (m.getResult() == EvalResult.low) {
                     trueNegatives++;
@@ -111,24 +145,25 @@ public class PersonalMessagingAssistant implements Trainable, Storable {
                     falsePositives++;
                 }
             } else {
-                if (m.getResult() == EvalResult.high) {
-                    truePositives++;
-                } else {
+                if (m.getResult() == EvalResult.low) {
                     falseNegatives++;
+                } else {
+                    truePositives++;
                 }
             }
+            count++;
         }
         
         System.out.println("\n+------------------------+");
         System.out.println("| TP: " + truePositives + "\t\tFP: " + falsePositives);
         System.out.println("| FN: " + falseNegatives + "\t\tTN: " + trueNegatives);
         System.out.println("+------------------------+");
-        System.out.println("| Total: " + messages.size());
+        System.out.println("| Total: " + count);
         System.out.println("+------------------------+");
         System.out.println("| Precision: " + truePositives * 1. / (truePositives + falsePositives));
         System.out.println("| Recall/sensitivity: " + truePositives * 1. / (truePositives + falseNegatives));
         System.out.println("| Specificity: " + trueNegatives * 1. / (falsePositives + trueNegatives));
-        System.out.println("| Accuracy: " + (truePositives + trueNegatives) * 1. / messages.size());
+        System.out.println("| Accuracy: " + (truePositives + trueNegatives) * 1. / count);
         System.out.println("+------------------------+");
     }
     
@@ -146,6 +181,10 @@ public class PersonalMessagingAssistant implements Trainable, Storable {
         }
         
         network.train(messages);
+    }
+    
+    public void train(File f) throws ParseException, FileNotFoundException {
+        this.train(parser.parse(f));
     }
     
     @Override

@@ -126,6 +126,10 @@ public class NormalizationLayer extends Layer {
     
     private String convertNumbersToWords(String text){
         text = StringReplacer.replace(text, Pattern.compile("\\d+"), (Matcher m) -> {
+            if (m.group().length() > 9) {
+                // Do not convert to prevent exceptions and large text numbers
+                return m.group();
+            }
             return EnglishNumberToWords.convert(Integer.parseInt(m.group()));
         });
         return text;
@@ -135,7 +139,7 @@ public class NormalizationLayer extends Layer {
         String[] words = text.split(" ");
         String reconstruct = "";
         try {
-            String excelFile = "abbreviations.xlsx";
+            String excelFile = "input/abbreviations.xlsx";
             Workbook workbook = WorkbookFactory.create(new File(excelFile));
             Sheet sheet = workbook.getSheetAt(0);
             DataFormatter dataFormatter = new DataFormatter();
