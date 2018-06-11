@@ -70,13 +70,14 @@ public class GUI extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jHideSpamCheckbox = new javax.swing.JCheckBox();
         jCheckBox2 = new javax.swing.JCheckBox();
-        score = new javax.swing.JLabel();
-        jProgressBar1 = new javax.swing.JProgressBar();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
-        jRadioButton3 = new javax.swing.JRadioButton();
         jCenterPanel = new javax.swing.JPanel();
         jMessageList = new pma.gui.JMessageList();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabelResults = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        score = new javax.swing.JLabel();
+        jProgressBar1 = new javax.swing.JProgressBar();
 
         jCheckBox3.setSelected(true);
         jCheckBox3.setText("Chat analysis complete");
@@ -147,19 +148,6 @@ public class GUI extends javax.swing.JFrame {
             }
         });
 
-        score.setText("Score");
-
-        jRadioButton1.setText("Low");
-        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton1ActionPerformed(evt);
-            }
-        });
-
-        jRadioButton2.setText("Medium");
-
-        jRadioButton3.setText("High");
-
         javax.swing.GroupLayout jCenterPanelLayout = new javax.swing.GroupLayout(jCenterPanel);
         jCenterPanel.setLayout(jCenterPanelLayout);
         jCenterPanelLayout.setHorizontalGroup(
@@ -171,35 +159,83 @@ public class GUI extends javax.swing.JFrame {
             .addComponent(jMessageList, javax.swing.GroupLayout.DEFAULT_SIZE, 423, Short.MAX_VALUE)
         );
 
+        jPanel3.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.darcula.color2"));
+        jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        jLabel1.setText("Results:");
+
+        jLabelResults.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        jLabelResults.setText("Results of chat evaluation will be shown here ...");
+        jLabelResults.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        jLabelResults.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jLabelResults.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabelResults, javax.swing.GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabelResults, javax.swing.GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE))
+        );
+
+        jPanel4.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.darcula.color2"));
+        jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        score.setText("Score");
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(score)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(score, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jHideSpamCheckbox)
-                        .addGap(36, 36, 36)
-                        .addComponent(jCheckBox2)
-                        .addGap(84, 84, 84)
-                        .addComponent(jButton2))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 21, Short.MAX_VALUE)
-                        .addComponent(score)
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 664, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jRadioButton1)
-                                .addGap(127, 127, 127)
-                                .addComponent(jRadioButton2)
-                                .addGap(131, 131, 131)
-                                .addComponent(jRadioButton3)
-                                .addGap(126, 126, 126))))
-                    .addComponent(jCenterPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 227, Short.MAX_VALUE)
+                .addComponent(jHideSpamCheckbox)
+                .addGap(36, 36, 36)
+                .addComponent(jCheckBox2)
+                .addGap(84, 84, 84)
+                .addComponent(jButton2)
                 .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jCenterPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -213,14 +249,9 @@ public class GUI extends javax.swing.JFrame {
                 .addComponent(jCenterPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(score))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jRadioButton1)
-                    .addComponent(jRadioButton2)
-                    .addComponent(jRadioButton3))
-                .addContainerGap(17, Short.MAX_VALUE))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -241,63 +272,16 @@ public class GUI extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
-    // upon clicking the jButton labeled import chat,  search for the 
-    // .txt file you want to analyse
-    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
-        // choose file through the OS file manager
-        JFileChooser fc = new JFileChooser();
-        int ret = fc.showOpenDialog(this);
-        if (ret == JFileChooser.APPROVE_OPTION) {
-            selectedFile = fc.getSelectedFile();
-            
-            try {
-                List<Message> messages = mp.parse(selectedFile);
-                jMessageList.clear();
-                for (Message m : messages) {
-                    jMessageList.addMessage(m);
-                }
-                
-                /*
-                BufferedReader br = null;
-                // add each line in the retrieved .txt file to a StringBuilder object
-                try {
-                br = new BufferedReader(new FileReader(f));
-                StringBuilder sb = new StringBuilder();
-                String line = br.readLine();
-                
-                // continue adding lines until no lines are left
-                while (line != null) {
-                sb.append(line);
-                sb.append(System.lineSeparator());
-                line = br.readLine();
-                }
-                
-                // call toString on the stringbuilder and print the entire .txt
-                // in the jTextArea
-                String all = sb.toString();
-                jTextArea1.setText(all);
-                
-                } catch (IOException e) {
-                } finally {
-                try {
-                br.close();
-                } catch (IOException e) {
-                
-                }
-                }
-                */
-            } catch (ParseException | FileNotFoundException ex) {
-                ex.printStackTrace();
-            }
-        }
-            
-    }//GEN-LAST:event_jButton1MouseClicked
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
-    
+    }//GEN-LAST:event_jCheckBox2ActionPerformed
+
+    private void jHideSpamCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jHideSpamCheckboxActionPerformed
+        // TODO add your handling code here:
+        jMessageList.setHideSpam(jHideSpamCheckbox.isSelected());
+    }//GEN-LAST:event_jHideSpamCheckboxActionPerformed
+
     /** 
      * The handler for the 'run' button. 
      * 
@@ -305,18 +289,18 @@ public class GUI extends javax.swing.JFrame {
      * of some chat
      */
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        
+
         EvalResult[] results = null;
-        
+
         try {
             /**
-             * This button does 2 things for now:
-             *
-             * 1. Show a random fake score that was assigned to the chat/thread
-             * 2. Show a fake popup dialog that confirms the analysis has been
-             * completed
-             */
-            
+            * This button does 2 things for now:
+            *
+            * 1. Show a random fake score that was assigned to the chat/thread
+            * 2. Show a fake popup dialog that confirms the analysis has been
+            * completed
+            */
+
             results = pa.process(selectedFile);
             jMessageList.setResults(results);
             List<Message> outputMessages = pa.getLastOutputMessages();
@@ -326,51 +310,107 @@ public class GUI extends javax.swing.JFrame {
             }
             jMessageList.setThreads(threadIndices);
             
+            int[] stats = PersonalMessagingAssistant.calculateStatistics(outputMessages);
+            int TP = stats[0];
+            int TN = stats[1];
+            int FP = stats[2];
+            int FN = stats[3];
+            int CT = stats[4];
+            String statisticsString = "<html>";
+            statisticsString += String.format("TP: %d  FP: %d<br/>", TP, FP);
+            statisticsString += String.format("FN: %d  TN: %d<br/>", FN, TN);
+            statisticsString += String.format("Total: %d<br/>", CT);
+            statisticsString += String.format("Precision: %.2f Recall: %.2f<br/>", TP * 1. / (TP+FP), TP * 1. / (TP + FN));
+            statisticsString += String.format("Specificity: %.2f Accuracy: %.2f", TN * 1. / (FP+TN), (TP + TN) * 1. / CT);
+            statisticsString += "</html>";
+            jLabelResults.setText(statisticsString);
+
         } catch (ParseException | FileNotFoundException ex) {
             ex.printStackTrace();
         }
-        
-        
-        
+
         // 1. Show random fake score in the main GUI
         Random r = new Random();
         int threadScore = r.nextInt(101); // score has scale 0 - 100
-        
-        // add all buttons to a group such that only 1 button at a time 
+
+        // add all buttons to a group such that only 1 button at a time
         // can be selected
-        buttonGroup1.add(jRadioButton1);
-        buttonGroup1.add(jRadioButton2);
-        buttonGroup1.add(jRadioButton3);
-                
+//        buttonGroup1.add(jRadioButton1);
+//        buttonGroup1.add(jRadioButton2);
+//        buttonGroup1.add(jRadioButton3);
+
         // check one of the three labeled radio buttons
         jProgressBar1.setValue(threadScore);
-        if (threadScore <= 33) {
-            jRadioButton1.setSelected(true);
-        } else if (threadScore <= 67) {
-            jRadioButton2.setSelected(true);
-        } else {
-            jRadioButton3.setSelected(true);
-        }
-        
+//        if (threadScore <= 33) {
+//            jRadioButton1.setSelected(true);
+//        } else if (threadScore <= 67) {
+//            jRadioButton2.setSelected(true);
+//        } else {
+//            jRadioButton3.setSelected(true);
+//        }
+
         // 2. Show the popup dialog
         jDialog1.setVisible(true);
         jDialog1.setBounds(300, 300, 200, 80);
-       
+
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox2ActionPerformed
+    }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jRadioButton1ActionPerformed
+    // upon clicking the jButton labeled import chat,  search for the 
+    // .txt file you want to analyse
+    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+        // choose file through the OS file manager
+        JFileChooser fc = new JFileChooser();
+        int ret = fc.showOpenDialog(this);
+        if (ret == JFileChooser.APPROVE_OPTION) {
+            selectedFile = fc.getSelectedFile();
 
-    private void jHideSpamCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jHideSpamCheckboxActionPerformed
-        // TODO add your handling code here:
-        jMessageList.setHideSpam(jHideSpamCheckbox.isSelected());
-    }//GEN-LAST:event_jHideSpamCheckboxActionPerformed
+            try {
+                List<Message> messages = mp.parse(selectedFile);
+                jMessageList.clear();
+                for (Message m : messages) {
+                    jMessageList.addMessage(m);
+                }
 
+                /*
+                BufferedReader br = null;
+                // add each line in the retrieved .txt file to a StringBuilder object
+                try {
+                    br = new BufferedReader(new FileReader(f));
+                    StringBuilder sb = new StringBuilder();
+                    String line = br.readLine();
+
+                    // continue adding lines until no lines are left
+                    while (line != null) {
+                        sb.append(line);
+                        sb.append(System.lineSeparator());
+                        line = br.readLine();
+                    }
+
+                    // call toString on the stringbuilder and print the entire .txt
+                    // in the jTextArea
+                    String all = sb.toString();
+                    jTextArea1.setText(all);
+
+                } catch (IOException e) {
+                } finally {
+                    try {
+                        br.close();
+                    } catch (IOException e) {
+
+                    }
+                }
+                */
+            } catch (ParseException | FileNotFoundException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+    }//GEN-LAST:event_jButton1MouseClicked
+        
     /**
      * @param args the command line arguments
      */
@@ -415,13 +455,14 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JCheckBox jCheckBox3;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JCheckBox jHideSpamCheckbox;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabelResults;
     private pma.gui.JMessageList jMessageList;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JProgressBar jProgressBar1;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JRadioButton jRadioButton3;
     private javax.swing.JLabel score;
     // End of variables declaration//GEN-END:variables
 }

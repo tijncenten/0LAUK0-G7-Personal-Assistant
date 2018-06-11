@@ -132,7 +132,7 @@ public class PersonalMessagingAssistant implements Trainable, Storable {
         return this.process(parser.parse(f));
     }
     
-    public static void calculateAccuracy(List<Message> messages) {
+    public static int[] calculateStatistics(List<Message> messages) {
         int truePositives = 0;
         int trueNegatives = 0;
         int falsePositives = 0;
@@ -158,6 +158,17 @@ public class PersonalMessagingAssistant implements Trainable, Storable {
             }
             count++;
         }
+        return new int[] {truePositives, trueNegatives, falsePositives, falseNegatives, count};
+    }
+    
+    public static void calculateAccuracy(List<Message> messages) {
+        int[] stats = calculateStatistics(messages);
+        
+        int truePositives = stats[0];
+        int trueNegatives = stats[1];
+        int falsePositives = stats[2];
+        int falseNegatives = stats[3];
+        int count = stats[4];
         
         System.out.println("\n+------------------------+");
         System.out.println("| TP: " + truePositives + "\t\tFP: " + falsePositives);
