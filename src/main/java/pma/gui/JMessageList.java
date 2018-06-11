@@ -25,6 +25,8 @@ public class JMessageList extends JPanel {
     
     private JPanel mainList;
     
+    private boolean hideSpam = true;
+    
     private List<JMessagePanel> messagePanels = new ArrayList<>();
     
     public JMessageList() {
@@ -61,8 +63,22 @@ public class JMessageList extends JPanel {
     }
     
     public void updateList() {
+        updateMessageVisibility();
         validate();
         repaint();
+    }
+    
+    public void setHideSpam(boolean value) {
+        this.hideSpam = value;
+        this.updateMessageVisibility();
+    }
+    
+    private void updateMessageVisibility() {
+        for (JMessagePanel mp : messagePanels) {
+            if (mp.getMessage().getResult() == EvalResult.low) {
+                mp.setVisible(!this.hideSpam);
+            }
+        }
     }
     
     public void setResults(EvalResult[] results) {

@@ -68,7 +68,7 @@ public class GUI extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jCheckBox1 = new javax.swing.JCheckBox();
+        jHideSpamCheckbox = new javax.swing.JCheckBox();
         jCheckBox2 = new javax.swing.JCheckBox();
         score = new javax.swing.JLabel();
         jProgressBar1 = new javax.swing.JProgressBar();
@@ -130,9 +130,15 @@ public class GUI extends javax.swing.JFrame {
             }
         });
 
-        jCheckBox1.setSelected(true);
-        jCheckBox1.setText("Keyword based filtering");
-        jCheckBox1.setToolTipText("Whether you want to apply keyword based filtering on this chat");
+        jHideSpamCheckbox.setSelected(true);
+        jHideSpamCheckbox.setText("Hide spam");
+        jHideSpamCheckbox.setToolTipText("Whether you want to only show the notification worthy messages");
+        jHideSpamCheckbox.setActionCommand("Hide spam");
+        jHideSpamCheckbox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jHideSpamCheckboxActionPerformed(evt);
+            }
+        });
 
         jCheckBox2.setText("Neural Network");
         jCheckBox2.addActionListener(new java.awt.event.ActionListener() {
@@ -174,7 +180,7 @@ public class GUI extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jCheckBox1)
+                        .addComponent(jHideSpamCheckbox)
                         .addGap(36, 36, 36)
                         .addComponent(jCheckBox2)
                         .addGap(84, 84, 84)
@@ -200,7 +206,7 @@ public class GUI extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
-                    .addComponent(jCheckBox1)
+                    .addComponent(jHideSpamCheckbox)
                     .addComponent(jCheckBox2)
                     .addComponent(jButton2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -360,6 +366,11 @@ public class GUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jRadioButton1ActionPerformed
 
+    private void jHideSpamCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jHideSpamCheckboxActionPerformed
+        // TODO add your handling code here:
+        jMessageList.setHideSpam(jHideSpamCheckbox.isSelected());
+    }//GEN-LAST:event_jHideSpamCheckboxActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -400,10 +411,10 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JPanel jCenterPanel;
-    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
     private javax.swing.JDialog jDialog1;
+    private javax.swing.JCheckBox jHideSpamCheckbox;
     private pma.gui.JMessageList jMessageList;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
