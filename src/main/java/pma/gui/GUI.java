@@ -313,6 +313,12 @@ public class GUI extends javax.swing.JFrame {
             
             results = pa.process(selectedFile);
             jMessageList.setResults(results);
+            List<Message> outputMessages = pa.getLastOutputMessages();
+            int[] threadIndices = new int[outputMessages.size()];
+            for (int i = 0; i < outputMessages.size(); i++) {
+                threadIndices[i] = outputMessages.get(i).getThreadIndex();
+            }
+            jMessageList.setThreads(threadIndices);
             
         } catch (ParseException | FileNotFoundException ex) {
             ex.printStackTrace();

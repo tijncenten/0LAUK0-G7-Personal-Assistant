@@ -77,4 +77,13 @@ public class JMessageList extends JPanel {
         updateList();
     }
     
+    public void setThreads(int[] threadIndices) {
+        if (threadIndices.length != messagePanels.size()) {
+            throw new IllegalStateException("size not equal");
+        }
+        
+        for (int i = 0; i < threadIndices.length; i++) {
+            messagePanels.get(i).getMessage().setThreadIndex(threadIndices[i]);
+        }
+    }
 }

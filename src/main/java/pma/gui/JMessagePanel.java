@@ -33,17 +33,23 @@ public class JMessagePanel extends JPanel {
     private Color mediumColor = new Color(255, 255, 128);
     private Color lowColor = new Color(255, 128, 128);
     
+    private JPanel threadIndicator = new JPanel();
+    private JLabel threadLabel = new JLabel();
     private JPanel spamIndicator = new JPanel();
     
     public JMessagePanel(Message m) {
         super(new FlowLayout(FlowLayout.LEFT));
         this.message = m;
-        this.setLayout(new BorderLayout());
+       // this.setLayout(new BorderLayout());
         
         this.setBorder(new MatteBorder(0, 0, 1, 0, Color.GRAY));
         
+        //threadIndicator.setLayout(new BorderLayout());
+        threadIndicator.setSize(20, 25);
+        threadIndicator.add(threadLabel);
+        this.add(threadIndicator);
         
-        spamIndicator.setLayout(new BorderLayout());
+        //spamIndicator.setLayout(new BorderLayout());
         spamIndicator.setSize(25, 25);
         this.add(spamIndicator);
         
@@ -61,6 +67,9 @@ public class JMessagePanel extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        
+        threadLabel.setText("" + message.getThreadIndex());
+        
         
         Color spamColor = normalColor;
         if (message.isSpam() != null) {

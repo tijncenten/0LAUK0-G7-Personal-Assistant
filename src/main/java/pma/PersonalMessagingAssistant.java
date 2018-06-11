@@ -44,6 +44,8 @@ public class PersonalMessagingAssistant implements Trainable, Storable {
     
     private final MessageParser parser;
     private final int batchSize;
+    
+    private List<Message> lastOutputMessages;
 
     public PersonalMessagingAssistant(MessageParser parser, int batchSize) {
         constructNetwork();
@@ -96,13 +98,12 @@ public class PersonalMessagingAssistant implements Trainable, Storable {
             
             outputMessages.addAll(network.getOutputLayer().getOutput());
         }
-        
-        
-        //System.out.println(evaluation.save("bayesian"));
 
         for (Message m : outputMessages) {
             System.out.println(m);
         }
+        
+        lastOutputMessages = outputMessages;
         
         if (numberOfMessages != outputMessages.size()) {
             throw new IllegalStateException("Number of input messages (" + messages.size() + ") is not equal to number of output messages (" + outputMessages.size() + ")");
@@ -121,6 +122,10 @@ public class PersonalMessagingAssistant implements Trainable, Storable {
         calculateAccuracy(outputMessages);
         
         return results;
+    }
+    
+    public List<Message> getLastOutputMessages() {
+        return this.lastOutputMessages;
     }
     
     public EvalResult[] process(File f) throws ParseException, FileNotFoundException {
