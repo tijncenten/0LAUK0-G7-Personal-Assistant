@@ -39,6 +39,8 @@ public class GUI extends javax.swing.JFrame {
     private MessageParser mp;
     private int batchSize = 200;
     
+    private Message feedbackMessage;
+    
     //private JMessageList messageList = new JMessageList();
 
     /**
@@ -47,9 +49,29 @@ public class GUI extends javax.swing.JFrame {
     public GUI() {
         initComponents();
         //jCenterPanel.add(messageList);
+        
+        jMessageList.setMessageSelectedListener((m) -> {
+            updateSelectedMessageInfo(m);
+        });
+        
         mp = new MessageParser();
         pa = new PersonalMessagingAssistant(mp, batchSize);
         pa.load("", "emre-es3");
+    }
+    
+    private void updateSelectedMessageInfo(Message m) {
+        jLabelMessageSender.setText(m.getSender().toString());
+        jLabelMessageText.setText("<html>" + m.getText() + "</html>");
+        feedbackMessage = m;
+    }
+    
+    private void clearUI() {
+        feedbackMessage = null;
+        jLabelResults.setText("Results of chat evaluation will be shown here ...");
+        jLabelMessageSender.setText("...");
+        jLabelMessageText.setText("Message ...");
+        jProgressBar1.setValue(0);
+        jMessageList.clear();
     }
 
     /**
@@ -78,6 +100,10 @@ public class GUI extends javax.swing.JFrame {
         jPanel4 = new javax.swing.JPanel();
         score = new javax.swing.JLabel();
         jProgressBar1 = new javax.swing.JProgressBar();
+        jButtonFeedback = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jLabelMessageSender = new javax.swing.JLabel();
+        jLabelMessageText = new javax.swing.JLabel();
 
         jCheckBox3.setSelected(true);
         jCheckBox3.setText("Chat analysis complete");
@@ -159,7 +185,6 @@ public class GUI extends javax.swing.JFrame {
             .addComponent(jMessageList, javax.swing.GroupLayout.DEFAULT_SIZE, 423, Short.MAX_VALUE)
         );
 
-        jPanel3.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.darcula.color2"));
         jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jLabel1.setText("Results:");
@@ -189,13 +214,28 @@ public class GUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabelResults, javax.swing.GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE))
+                .addComponent(jLabelResults, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel4.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.darcula.color2"));
         jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         score.setText("Score");
+
+        jButtonFeedback.setText("Give Feedback");
+        jButtonFeedback.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonFeedbackActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("Sender:");
+
+        jLabelMessageSender.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        jLabelMessageSender.setText("...");
+
+        jLabelMessageText.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        jLabelMessageText.setText("Message ...");
+        jLabelMessageText.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -203,19 +243,36 @@ public class GUI extends javax.swing.JFrame {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(score)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabelMessageSender, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonFeedback))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addComponent(score)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabelMessageText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(score, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButtonFeedback)
+                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel2)
+                        .addComponent(jLabelMessageSender)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabelMessageText, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jProgressBar1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(score, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -368,9 +425,10 @@ public class GUI extends javax.swing.JFrame {
         if (ret == JFileChooser.APPROVE_OPTION) {
             selectedFile = fc.getSelectedFile();
 
+            clearUI();
+            
             try {
                 List<Message> messages = mp.parse(selectedFile);
-                jMessageList.clear();
                 for (Message m : messages) {
                     jMessageList.addMessage(m);
                 }
@@ -410,6 +468,13 @@ public class GUI extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_jButton1MouseClicked
+
+    private void jButtonFeedbackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFeedbackActionPerformed
+        if (feedbackMessage == null) {
+            return;
+        }
+        System.err.println("TODO: Requesting feedback for message: " + feedbackMessage);
+    }//GEN-LAST:event_jButtonFeedbackActionPerformed
         
     /**
      * @param args the command line arguments
@@ -450,12 +515,16 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButtonFeedback;
     private javax.swing.JPanel jCenterPanel;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JCheckBox jHideSpamCheckbox;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabelMessageSender;
+    private javax.swing.JLabel jLabelMessageText;
     private javax.swing.JLabel jLabelResults;
     private pma.gui.JMessageList jMessageList;
     private javax.swing.JPanel jPanel1;
