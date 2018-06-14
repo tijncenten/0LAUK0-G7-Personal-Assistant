@@ -17,11 +17,13 @@ import java.util.logging.Logger;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import pma.PersonalMessagingAssistant;
 import pma.PersonalMessagingAssistant.EvalResult;
 import pma.chatparsers.MessageParser;
+import pma.feedback.FeedbackEvaluator;
 import pma.message.Message;
 
 /**
@@ -48,6 +50,7 @@ public class GUI extends javax.swing.JFrame {
      */
     public GUI() {
         initComponents();
+        feedbackFrame.setList(feedbackList);
         //jCenterPanel.add(messageList);
         
         jMessageList.setMessageSelectedListener((m) -> {
@@ -56,6 +59,7 @@ public class GUI extends javax.swing.JFrame {
         
         mp = new MessageParser();
         pa = new PersonalMessagingAssistant(mp, batchSize);
+        pa.setFeedbackEvaluator((FeedbackEvaluator) feedbackFrame);
         pa.load("", "emre-es3");
     }
     
@@ -87,6 +91,8 @@ public class GUI extends javax.swing.JFrame {
         jCheckBox3 = new javax.swing.JCheckBox();
         buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel2 = new javax.swing.JPanel();
+        feedbackFrame = new pma.gui.FeedbackFrame();
+        feedbackList = new pma.gui.JFeedbackList();
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -136,6 +142,21 @@ public class GUI extends javax.swing.JFrame {
             .addGap(0, 100, Short.MAX_VALUE)
         );
 
+        feedbackFrame.setAlwaysOnTop(true);
+        feedbackFrame.setLocation(new java.awt.Point(0, 0));
+        feedbackFrame.setMinimumSize(new java.awt.Dimension(800, 600));
+
+        javax.swing.GroupLayout feedbackFrameLayout = new javax.swing.GroupLayout(feedbackFrame.getContentPane());
+        feedbackFrame.getContentPane().setLayout(feedbackFrameLayout);
+        feedbackFrameLayout.setHorizontalGroup(
+            feedbackFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(feedbackList, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+        );
+        feedbackFrameLayout.setVerticalGroup(
+            feedbackFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(feedbackList, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jButton1.setText("Import Chat");
@@ -160,7 +181,6 @@ public class GUI extends javax.swing.JFrame {
         jHideSpamCheckbox.setSelected(true);
         jHideSpamCheckbox.setText("Hide spam");
         jHideSpamCheckbox.setToolTipText("Whether you want to only show the notification worthy messages");
-        jHideSpamCheckbox.setActionCommand("Hide spam");
         jHideSpamCheckbox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jHideSpamCheckboxActionPerformed(evt);
@@ -513,6 +533,8 @@ public class GUI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
+    private pma.gui.FeedbackFrame feedbackFrame;
+    private pma.gui.JFeedbackList feedbackList;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButtonFeedback;
