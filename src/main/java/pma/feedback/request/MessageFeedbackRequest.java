@@ -22,7 +22,7 @@ public class MessageFeedbackRequest extends FeedbackRequest {
 
     @Override
     public String getSubTitle() {
-        return message.getSender() + ": " + message.getText();
+        return message.getSender() + ": " + message.getOriginalText();
     }
 
     @Override

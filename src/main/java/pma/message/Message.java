@@ -10,6 +10,7 @@ import pma.contact.Contact;
 public class Message {
     
     protected String text;
+    protected String originalText;
     protected final long timestamp;
     protected final Contact sender;
     protected Message request = null;
@@ -22,12 +23,14 @@ public class Message {
     
     public Message(String text, long timestamp, Contact sender) {
         this.text = text;
+        this.originalText = text;
         this.timestamp = timestamp;
         this.sender = sender;
     }
     
     public Message(Message original, boolean spam) {
         this.text = original.getText();
+        this.originalText = original.getOriginalText();
         this.timestamp = original.getTimestamp();
         this.sender = original.getSender();
         this.result = original.getResult();
@@ -36,6 +39,7 @@ public class Message {
     
     public Message(String text, long timestamp, Contact sender, boolean spam) {
         this.text = text;
+        this.originalText = text;
         this.timestamp = timestamp;
         this.sender = sender;
         this.spam = spam;
@@ -47,6 +51,10 @@ public class Message {
     
     public void setText(String text) {
         this.text = text;
+    }
+    
+    public String getOriginalText() {
+        return originalText;
     }
 
     public long getTimestamp() {
