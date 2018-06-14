@@ -99,26 +99,11 @@ public class RNNEvaluation extends Evaluation implements Trainable, Storable {
         MessageSetIterator input = new MessageSetIterator(messages, vec, batchSize, truncateReviewsToLength, false);
 
         INDArray networkOutput = net.output(input);
-        
-        //System.out.println(networkOutput);
 
         for (int i = 0; i < messages.size(); i++) {
-            //INDArray features = input.loadFeaturesFromString(messages.get(i).getText(), truncateReviewsToLength);
-            //INDArray out = net.output(features);
-            
-            //int timeSeriesLength = out.size(2);
-            //INDArray probabilitiesAtLastWord = out.get(NDArrayIndex.point(0), NDArrayIndex.all(), NDArrayIndex.point(timeSeriesLength - 1));
-            //double pSpam = probabilitiesAtLastWord.getDouble(0);
-            //double pHam = probabilitiesAtLastWord.getDouble(1);
-            
-            
-            
             INDArray row = networkOutput.getRow(i);
-            //System.out.println(row);
             double pSpam = row.getRow(0).sumNumber().doubleValue();
             double pHam = row.getRow(1).sumNumber().doubleValue();
-            //System.out.println("P(spam): " + pSpam);
-            //System.out.println("P(ham): " + pHam);
             
             double prob;
             if (pSpam > pHam) {
