@@ -16,6 +16,7 @@ import pma.evaluation.RNNEvaluation;
 import pma.evaluation.function.AverageEvaluationFunction;
 import pma.evaluation.function.MaxEvaluationFunction;
 import pma.feedback.AutoFeedbackEvaluator;
+import pma.feedback.FeedbackEvaluator;
 import pma.feedback.FeedbackModule;
 import pma.filter.CategorizationFilter;
 import pma.filter.Filter;
@@ -60,7 +61,7 @@ public class PersonalMessagingAssistant implements Trainable, Storable {
         network.setPrefs(prefs);
         network.setFeedbackModule(feedbackModule);
         
-        feedbackModule.setFeedbackEvaluator(new AutoFeedbackEvaluator());
+//        feedbackModule.setFeedbackEvaluator(new AutoFeedbackEvaluator());
         
         network.addLayer(new PreprocessingLayer());
         //network.addLayer(new SpamFilter(output));
@@ -81,6 +82,9 @@ public class PersonalMessagingAssistant implements Trainable, Storable {
         network.build();
     }
     
+    public void setFeedbackEvaluator(FeedbackEvaluator evaluator){
+        feedbackModule.setFeedbackEvaluator(evaluator);
+    }
     protected EvalResult[] process(List<Message> messages) {
         
         int numberOfMessages = messages.size();
