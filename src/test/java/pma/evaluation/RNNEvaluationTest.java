@@ -95,14 +95,21 @@ public class RNNEvaluationTest {
         
         network.build();
         
-        //network.load("", "rnn300");
+        network.load("", "rnn-test-emre");
         
         //network.train(messages);
         MessageParser mp = new MessageParser();
+        
+        
+        //network.process(messages);
+        
         try {
-            network.train(mp.parse(new File("chats/jodi-linear.txt")));
-            network.process(mp.parse(new File("chats/jodi-linear.txt")));
-            //network.save("", "rnn300");
+            //network.train(mp.parse(new File("chats/emre-es.txt")));
+            
+            System.out.println("Starting processing");
+            network.process(mp.parse(new File("chats/emre-es.txt")));
+            
+            //network.save("", "rnn-test-emre");
         } catch (ParseException ex) {
             Logger.getLogger(RNNEvaluationTest.class.getName()).log(Level.SEVERE, null, ex);
         } catch (FileNotFoundException ex) {

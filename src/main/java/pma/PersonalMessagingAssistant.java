@@ -71,9 +71,9 @@ public class PersonalMessagingAssistant implements Trainable, Storable {
         EvaluationFunction evalFunc = new AverageEvaluationFunction();
         EvaluationLayer evalLayer = new EvaluationLayer(evalFunc);
         BayesianEvaluation evaluation = new BayesianEvaluation();
-        //RNNEvaluation rnnEvaluation = new RNNEvaluation();
-        evalLayer.addEvaluation(evaluation);
-        //evalLayer.addEvaluation(rnnEvaluation);
+        RNNEvaluation rnnEvaluation = new RNNEvaluation();
+        //evalLayer.addEvaluation(evaluation);
+        evalLayer.addEvaluation(rnnEvaluation);
         
         network.addLayer(evalLayer);
         network.addLayer(output);

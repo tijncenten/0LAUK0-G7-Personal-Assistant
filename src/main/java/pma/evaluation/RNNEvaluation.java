@@ -55,9 +55,9 @@ public class RNNEvaluation extends Evaluation implements Trainable, Storable {
     private Word2Vec vec = null;
     
     
-    private int batchSize = 64;     //Number of examples in each minibatch
+    private int batchSize = 200;     //Number of examples in each minibatch
     private int vectorSize = 300;   //Size of the word vectors. 300 in the Google News model
-    private int nEpochs = 6;        //Number of epochs (full passes of training data) to train on
+    private int nEpochs = 20;        //Number of epochs (full passes of training data) to train on
     private int truncateReviewsToLength = 256;  //Truncate reviews with length (# words) greater than this
     private final int seed = 0;     //Seed for reproducibility
     
@@ -99,11 +99,26 @@ public class RNNEvaluation extends Evaluation implements Trainable, Storable {
         MessageSetIterator input = new MessageSetIterator(messages, vec, batchSize, truncateReviewsToLength, false);
 
         INDArray networkOutput = net.output(input);
+        
+        //System.out.println(networkOutput);
 
         for (int i = 0; i < messages.size(); i++) {
+            //INDArray features = input.loadFeaturesFromString(messages.get(i).getText(), truncateReviewsToLength);
+            //INDArray out = net.output(features);
+            
+            //int timeSeriesLength = out.size(2);
+            //INDArray probabilitiesAtLastWord = out.get(NDArrayIndex.point(0), NDArrayIndex.all(), NDArrayIndex.point(timeSeriesLength - 1));
+            //double pSpam = probabilitiesAtLastWord.getDouble(0);
+            //double pHam = probabilitiesAtLastWord.getDouble(1);
+            
+            
+            
             INDArray row = networkOutput.getRow(i);
+            //System.out.println(row);
             double pSpam = row.getRow(0).sumNumber().doubleValue();
             double pHam = row.getRow(1).sumNumber().doubleValue();
+            //System.out.println("P(spam): " + pSpam);
+            //System.out.println("P(ham): " + pHam);
             
             double prob;
             if (pSpam > pHam) {
@@ -141,7 +156,7 @@ public class RNNEvaluation extends Evaluation implements Trainable, Storable {
                 .layerSize(vectorSize)
                 .seed(42)
                 .windowSize(5)
-                .epochs(3)
+                .epochs(5)
                 .elementsLearningAlgorithm(new SkipGram<VocabWord>())
                 .iterate(iter)
                 .tokenizerFactory(t)

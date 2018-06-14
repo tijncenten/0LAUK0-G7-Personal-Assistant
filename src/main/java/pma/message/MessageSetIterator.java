@@ -81,6 +81,12 @@ public class MessageSetIterator implements DataSetIterator {
         }
         
         if (maxLength > truncateLength) maxLength = truncateLength;
+        
+        maxLength = truncateLength;
+        
+        if (maxLength == 0) {
+            System.out.println("MaxLength is 0");
+        }
                 
         // Create data for training
         INDArray features = Nd4j.create(new int[]{msgs.size(), vectorSize, maxLength}, 'f');
