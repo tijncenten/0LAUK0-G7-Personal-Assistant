@@ -32,7 +32,7 @@ public class UserPreferences implements Storable {
     
     /** Evaluation preferences */
     private double evaluationThreshold = 0.5;
-    private double evaluationUncertainty = 0.05;
+    private double evaluationUncertainty = 0.0;
 
     public CategorizationPrefs getQuestionPrefs() {
         return questionPrefs;

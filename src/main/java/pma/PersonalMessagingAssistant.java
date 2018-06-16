@@ -47,6 +47,7 @@ public class PersonalMessagingAssistant implements Trainable, Storable {
     private final int batchSize;
     
     private List<Message> lastOutputMessages;
+    private long lastProcessingTime = 0;
 
     public PersonalMessagingAssistant(MessageParser parser, int batchSize) {
         constructNetwork();
@@ -91,6 +92,8 @@ public class PersonalMessagingAssistant implements Trainable, Storable {
 
         int iterations = (int) Math.ceil(numberOfMessages * 1. / batchSize);
         
+        long startTime = System.nanoTime();
+        
         List<Message> outputMessages = new ArrayList<>();
         for (int i = 0; i < iterations; i++) {
             int start = i * batchSize;
@@ -102,6 +105,9 @@ public class PersonalMessagingAssistant implements Trainable, Storable {
             
             outputMessages.addAll(network.getOutputLayer().getOutput());
         }
+        
+        long endTime = System.nanoTime();
+        lastProcessingTime = endTime - startTime;
 
         for (Message m : outputMessages) {
             System.out.println(m);
@@ -130,6 +136,10 @@ public class PersonalMessagingAssistant implements Trainable, Storable {
     
     public List<Message> getLastOutputMessages() {
         return this.lastOutputMessages;
+    }
+    
+    public long getLastProcessingTime() {
+        return this.lastProcessingTime;
     }
     
     public EvalResult[] process(File f) throws ParseException, FileNotFoundException {

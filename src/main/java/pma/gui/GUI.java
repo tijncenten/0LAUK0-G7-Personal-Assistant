@@ -60,7 +60,7 @@ public class GUI extends javax.swing.JFrame {
         mp = new MessageParser();
         pa = new PersonalMessagingAssistant(mp, batchSize);
         pa.setFeedbackEvaluator((FeedbackEvaluator) feedbackFrame);
-        pa.load("", "emre-es3");
+        pa.load("", "jodi-linear-final");
     }
     
     private void updateSelectedMessageInfo(Message m) {
@@ -103,6 +103,7 @@ public class GUI extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabelResults = new javax.swing.JLabel();
+        jLabelProcessingTime = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         score = new javax.swing.JLabel();
         jProgressBar1 = new javax.swing.JProgressBar();
@@ -225,14 +226,17 @@ public class GUI extends javax.swing.JFrame {
                     .addComponent(jLabelResults, javax.swing.GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel1)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabelProcessingTime)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabelProcessingTime))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabelResults, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -386,6 +390,9 @@ public class GUI extends javax.swing.JFrame {
                 threadIndices[i] = outputMessages.get(i).getThreadIndex();
             }
             jMessageList.setThreads(threadIndices);
+            
+            long processingTime = pa.getLastProcessingTime();
+            jLabelProcessingTime.setText(String.format("%.2fs", processingTime * 1. / 1000000000));
             
             int[] stats = PersonalMessagingAssistant.calculateStatistics(outputMessages);
             int TP = stats[0];
@@ -547,6 +554,7 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabelMessageSender;
     private javax.swing.JLabel jLabelMessageText;
+    private javax.swing.JLabel jLabelProcessingTime;
     private javax.swing.JLabel jLabelResults;
     private pma.gui.JMessageList jMessageList;
     private javax.swing.JPanel jPanel1;

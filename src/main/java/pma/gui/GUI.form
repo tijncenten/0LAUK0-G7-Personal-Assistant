@@ -237,7 +237,8 @@
                           <Component id="jLabelResults" pref="383" max="32767" attributes="0"/>
                           <Group type="102" attributes="0">
                               <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
+                              <Component id="jLabelProcessingTime" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -248,7 +249,10 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabelProcessingTime" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jLabelResults" max="32767" attributes="0"/>
                   </Group>
@@ -273,6 +277,8 @@
                 </Property>
                 <Property name="horizontalTextPosition" type="int" value="2"/>
               </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="jLabelProcessingTime">
             </Component>
           </SubComponents>
         </Container>
