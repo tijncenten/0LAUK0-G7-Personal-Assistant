@@ -7,21 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 import pma.chatparsers.MessageParser;
 import pma.evaluation.BayesianEvaluation;
-import pma.evaluation.Evaluation;
 import pma.layer.OutputLayer;
 import pma.evaluation.function.EvaluationFunction;
 import pma.evaluation.EvaluationLayer;
-import pma.evaluation.KeywordEvaluation;
-import pma.evaluation.RNNEvaluation;
 import pma.evaluation.function.AverageEvaluationFunction;
-import pma.evaluation.function.MaxEvaluationFunction;
-import pma.feedback.AutoFeedbackEvaluator;
 import pma.feedback.FeedbackEvaluator;
 import pma.feedback.FeedbackModule;
 import pma.filter.CategorizationFilter;
-import pma.filter.Filter;
-import pma.filter.SpamFilter;
-import pma.layer.Layer;
 import pma.layer.LayerNetwork;
 import pma.layer.NormalizationLayer;
 import pma.layer.PreprocessingLayer;
@@ -62,10 +54,7 @@ public class PersonalMessagingAssistant implements Trainable, Storable {
         network.setPrefs(prefs);
         network.setFeedbackModule(feedbackModule);
         
-//        feedbackModule.setFeedbackEvaluator(new AutoFeedbackEvaluator());
-        
         network.addLayer(new PreprocessingLayer());
-        //network.addLayer(new SpamFilter(output));
         network.addLayer(new ThreadLayer());
         network.addLayer(new CategorizationFilter(output));
         network.addLayer(new NormalizationLayer());
@@ -73,9 +62,7 @@ public class PersonalMessagingAssistant implements Trainable, Storable {
         EvaluationFunction evalFunc = new AverageEvaluationFunction();
         EvaluationLayer evalLayer = new EvaluationLayer(evalFunc);
         BayesianEvaluation evaluation = new BayesianEvaluation();
-        RNNEvaluation rnnEvaluation = new RNNEvaluation();
         evalLayer.addEvaluation(evaluation);
-        //evalLayer.addEvaluation(rnnEvaluation);
         
         network.addLayer(evalLayer);
         network.addLayer(output);
