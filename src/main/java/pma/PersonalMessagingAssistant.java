@@ -234,4 +234,8 @@ public class PersonalMessagingAssistant implements Trainable, Storable {
         network.load(path, name);
         prefs.load(path, name);
     }
+    
+    public FeedbackModule getFeedbackModule(){
+        return feedbackModule;
+    }
 }

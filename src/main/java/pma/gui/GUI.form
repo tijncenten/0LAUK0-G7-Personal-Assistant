@@ -302,7 +302,9 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jLabelMessageSender" max="32767" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jButtonFeedback" min="-2" max="-2" attributes="0"/>
+                              <Component id="JFeedBackButton1" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="JFeedBackButton2" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="1" attributes="0">
                               <Component id="score" min="-2" max="-2" attributes="0"/>
@@ -320,7 +322,10 @@
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jButtonFeedback" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="JFeedBackButton2" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="JFeedBackButton1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabelMessageSender" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -346,12 +351,12 @@
             </Component>
             <Component class="javax.swing.JProgressBar" name="jProgressBar1">
             </Component>
-            <Component class="javax.swing.JButton" name="jButtonFeedback">
+            <Component class="javax.swing.JButton" name="JFeedBackButton2">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Give Feedback"/>
+                <Property name="text" type="java.lang.String" value="not usefull"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonFeedbackActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="JFeedBackButton2ActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel2">
@@ -375,6 +380,14 @@
                 <Property name="text" type="java.lang.String" value="Message ..."/>
                 <Property name="verticalAlignment" type="int" value="1"/>
               </Properties>
+            </Component>
+            <Component class="javax.swing.JButton" name="JFeedBackButton1">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="usefull"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="JFeedBackButton1ActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>

@@ -24,6 +24,7 @@ import pma.PersonalMessagingAssistant;
 import pma.PersonalMessagingAssistant.EvalResult;
 import pma.chatparsers.MessageParser;
 import pma.feedback.FeedbackEvaluator;
+import pma.feedback.request.MessageFeedbackRequest;
 import pma.message.Message;
 
 /**
@@ -60,7 +61,7 @@ public class GUI extends javax.swing.JFrame {
         mp = new MessageParser();
         pa = new PersonalMessagingAssistant(mp, batchSize);
         pa.setFeedbackEvaluator((FeedbackEvaluator) feedbackFrame);
-        pa.load("", "jodi-linear-final");
+        pa.load("", "jodi-eng-emre-es-final");
     }
     
     private void updateSelectedMessageInfo(Message m) {
@@ -107,10 +108,11 @@ public class GUI extends javax.swing.JFrame {
         jPanel4 = new javax.swing.JPanel();
         score = new javax.swing.JLabel();
         jProgressBar1 = new javax.swing.JProgressBar();
-        jButtonFeedback = new javax.swing.JButton();
+        JFeedBackButton2 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabelMessageSender = new javax.swing.JLabel();
         jLabelMessageText = new javax.swing.JLabel();
+        JFeedBackButton1 = new javax.swing.JButton();
 
         jCheckBox3.setSelected(true);
         jCheckBox3.setText("Chat analysis complete");
@@ -245,10 +247,10 @@ public class GUI extends javax.swing.JFrame {
 
         score.setText("Score");
 
-        jButtonFeedback.setText("Give Feedback");
-        jButtonFeedback.addActionListener(new java.awt.event.ActionListener() {
+        JFeedBackButton2.setText("not usefull");
+        JFeedBackButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonFeedbackActionPerformed(evt);
+                JFeedBackButton2ActionPerformed(evt);
             }
         });
 
@@ -260,6 +262,13 @@ public class GUI extends javax.swing.JFrame {
         jLabelMessageText.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
         jLabelMessageText.setText("Message ...");
         jLabelMessageText.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+
+        JFeedBackButton1.setText("usefull");
+        JFeedBackButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JFeedBackButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -273,7 +282,9 @@ public class GUI extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabelMessageSender, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonFeedback))
+                        .addComponent(JFeedBackButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(JFeedBackButton2))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                         .addComponent(score)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -286,7 +297,9 @@ public class GUI extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButtonFeedback)
+                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(JFeedBackButton2)
+                        .addComponent(JFeedBackButton1))
                     .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel2)
                         .addComponent(jLabelMessageSender)))
@@ -496,12 +509,23 @@ public class GUI extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jButton1MouseClicked
 
-    private void jButtonFeedbackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFeedbackActionPerformed
+    private void JFeedBackButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JFeedBackButton2ActionPerformed
         if (feedbackMessage == null) {
             return;
         }
-        System.err.println("TODO: Requesting feedback for message: " + feedbackMessage);
-    }//GEN-LAST:event_jButtonFeedbackActionPerformed
+        MessageFeedbackRequest messageFeedbackRequest = new MessageFeedbackRequest(feedbackMessage);
+        messageFeedbackRequest.setDoneListener(pa.getFeedbackModule());
+        messageFeedbackRequest.setFeedback(messageFeedbackRequest.getOptions()[1]);
+    }//GEN-LAST:event_JFeedBackButton2ActionPerformed
+
+    private void JFeedBackButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JFeedBackButton1ActionPerformed
+        if (feedbackMessage == null) {
+            return;
+        }
+        MessageFeedbackRequest messageFeedbackRequest = new MessageFeedbackRequest(feedbackMessage);
+        messageFeedbackRequest.setDoneListener(pa.getFeedbackModule());
+        messageFeedbackRequest.setFeedback(messageFeedbackRequest.getOptions()[0]);
+    }//GEN-LAST:event_JFeedBackButton1ActionPerformed
         
     /**
      * @param args the command line arguments
@@ -539,12 +563,13 @@ public class GUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton JFeedBackButton1;
+    private javax.swing.JButton JFeedBackButton2;
     private javax.swing.ButtonGroup buttonGroup1;
     private pma.gui.FeedbackFrame feedbackFrame;
     private pma.gui.JFeedbackList feedbackList;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButtonFeedback;
     private javax.swing.JPanel jCenterPanel;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;

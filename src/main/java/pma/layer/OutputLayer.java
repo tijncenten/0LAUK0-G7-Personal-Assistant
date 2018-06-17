@@ -24,7 +24,13 @@ public class OutputLayer extends Layer {
     
     public List<Message> getOutput() {
         messages.sort((o1, o2) -> {
-            return (int) (o1.getTimestamp() - o2.getTimestamp()); //To change body of generated lambdas, choose Tools | Templates.
+            //return (int) (o1.getTimestamp() - o2.getTimestamp()); //To change body of generated lambdas, choose Tools | Templates.
+            if(o1.getTimestamp() > o2.getTimestamp()){
+                return 1;
+            } else if (o1.getTimestamp() < o2.getTimestamp()) {
+                return -1;
+            }
+            return 0;
         });
         List<Message> stored = messages;
         messages = new ArrayList<>();

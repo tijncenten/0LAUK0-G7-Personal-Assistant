@@ -84,11 +84,12 @@ public class PersonalMessagingAssistantTest {
         //instance.load("", "jodi-linear_full-rnn2");
         try {
             //instance.process(messages);
-            instance.train(new File("chats/jodi-huis.txt"));
+            instance.train(new File("chats/jodi-eng.txt"));
+            instance.train(new File("chats/emre-es.txt"));
             //instance.process(new File("chats/emre-es.txt"));
-            instance.process(new File("chats/jodi-huis.txt"));
+            //instance.process(new File("chats/jodi-eng.txt"));
             System.out.println("done");
-            instance.save("", "jodi-huis-final");
+            instance.save("", "jodi-eng-emre-es-final");
             //instance.process(new File("chats/jodi-linear.txt"));
             //instance.save("", "test3");
             // TODO review the generated test code and remove the default call to fail.

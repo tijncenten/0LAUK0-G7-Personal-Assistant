@@ -1594,7 +1594,7 @@ So 24 euro extra, or 4 each.|1
 10-10-17 13:25 - Natalia: But the first design was made for 12x12, so should be all good, right?|1
 10-10-17 13:25 - Luke: But I have a good feeling that it would work|1
 10-10-17 13:25 - Luke: Well the problem with the first design is that you cant really make those connections using screws|1
-10-10-17 13:26 - Luke: There where some flaws in the design but I will try to fix it this week
+10-10-17 13:26 - Luke: There where some flaws in the design but I will try to fix it this week|1
 10-10-17 13:27 - Natalia: Okay that would be great, yes :)|1
 10-10-17 13:27 - Hannes: okay nice :)|0
 10-10-17 13:28 - Hannes: i can work tomorrow again, i have more time then i think|1
@@ -2276,7 +2276,7 @@ Tomorrow we have the end evaluation. I don't really know what we are going to do
 23-10-17 18:30 - Joost: 10.00|1
 23-10-17 18:30 - Joost: ?|1
 23-10-17 18:30 - Hannes: Sure|1
-23-10-17 18:32 - Luke: I dont think I am going to make it tomorow morning. Just got a message about another deadline|1.
+23-10-17 18:32 - Luke: I dont think I am going to make it tomorow morning. Just got a message about another deadline.|1
 23-10-17 18:32 - Luke: But as a group when do we wanna meet more this week|1
 23-10-17 18:33 - Luke: I al able to meet on wendsday, thurstday and maybe friday afternoon.|1
 23-10-17 18:33 - Luke: We should at least meet one time with the entire group to finish|1 everything and to make decissions for the final report and the demo. What about thurstday for that ?|1

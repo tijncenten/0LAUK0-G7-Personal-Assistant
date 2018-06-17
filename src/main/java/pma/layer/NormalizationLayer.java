@@ -155,7 +155,6 @@ public class NormalizationLayer extends Layer {
                         
                         if (reconstruct.length() != 0) {
                             reconstruct += " " + dataFormatter.formatCellValue(neighbourCell);
-                            System.out.println(dataFormatter.formatCellValue(neighbourCell));
                         } else {
                             reconstruct += dataFormatter.formatCellValue(neighbourCell);
                         }
