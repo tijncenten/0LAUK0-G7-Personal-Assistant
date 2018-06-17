@@ -1,5 +1,7 @@
 package pma.layer;
 
+import java.io.InputStream;
+
 /**
  *
  * @author s167501
@@ -7,4 +9,6 @@ package pma.layer;
 public interface Storable {
     public void save(String path, String name);
     public void load(String path, String name);
+    
+    public void load(InputStream is);
 }

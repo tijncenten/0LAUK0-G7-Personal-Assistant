@@ -11,9 +11,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.text.DateFormat;
@@ -40,12 +42,18 @@ import pma.message.Message;
 public class MessageParser {
     
     public List<Message> parse(File f) throws ParseException, FileNotFoundException {
+        String conversationText = stringRetriever(f);
+        return this.parse(conversationText);
+    }
+    
+    public List<Message> parse(InputStream is) throws ParseException {
+        Scanner s = new Scanner(is, "UTF-8").useDelimiter("\\A");
+        return this.parse(s.hasNext() ? s.next() : "");
+    }
+    
+    private List<Message> parse(String input) throws ParseException {
         List<Message> messages = new ArrayList<>();
         Map<String, Contact> contactMap = new HashMap<>();
-        
-        
-        // do the actual parsing
-        String conversationText = stringRetriever(f);
         
         final int flags = Pattern.DOTALL;
         // English language regex: (\\d{1,2}\\/\\d{1,2}\\/\\d{1,2},\\s\\d{2}:\\d{2})\\s-\\s([^:]+): (.+?)(?=(\\d{1,2}\\/\\d{1,2}\\/\\d{1,2},\\s\\d{2}:\\d{2}\\s-\\s[^:]*:|$))
@@ -53,13 +61,8 @@ public class MessageParser {
         // General language regex: (with 2 or 4 year digits)
             // (\d{1,2}(?>\/|-)\d{1,2}(?>\/|-)(?:\d{2}|\d{4}),?\s\d{2}:\d{2})\s-\s([^:]+): (.+?)?(?=(\d{1,2}(?>\/|-)\d{1,2}(?>\/|-)(?:\d{2}|\d{4}),?\s\d{2}:\d{2}\s-\s[^:]*:|$))
         Pattern p = Pattern.compile("(\\d{1,2}(?>\\/|-)\\d{1,2}(?>\\/|-)(?:\\d{2}|\\d{4}),?\\s\\d{2}:\\d{2})\\s-\\s([^:]+): (.+?)?(?=(\\d{1,2}(?>\\/|-)\\d{1,2}(?>\\/|-)(?:\\d{2}|\\d{4}),?\\s\\d{2}:\\d{2}\\s-\\s[^:]*:|$))", flags);
-        Matcher matcher = p.matcher(conversationText);
+        Matcher matcher = p.matcher(input);
         while (matcher.find()) {
-//            System.out.println(matcher.groupCount() + ": " + matcher.group(0));
-//            System.out.println("1: " + matcher.group(1));
-//            System.out.println("2: " + matcher.group(2));
-//            System.out.println("3: " + matcher.group(3));
-
             String date = matcher.group(1);
             String sender = matcher.group(2);
             String text = matcher.group(3);

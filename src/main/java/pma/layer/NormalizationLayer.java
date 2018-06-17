@@ -21,6 +21,7 @@ import pma.message.Message;
 import pma.preferences.UserPreferences;
 import pma.utils.EnglishNumberToWords;
 import pma.utils.StringReplacer;
+import pma.utils.StringReplacerCallback;
 
 /**
  *
@@ -58,12 +59,12 @@ public class NormalizationLayer extends Layer {
         text = convertNumbersToWords(text);
         
         // Perform stemming (walking -> walk) done
-        text = verbToBase(text);
+        //text = verbToBase(text);
         
         // Perform lemmatization (better -> good)
         
         // Replace abbreviations with full text
-        text = replaceAbbrivations(text);
+        //text = replaceAbbrivations(text);
         
         m.setText(text);
     }
@@ -98,6 +99,8 @@ public class NormalizationLayer extends Layer {
     private String verbToBase(String text) {
         System.setProperty("wordnet.database.dir", "dict");
         Morphology id = Morphology.getInstance();
+        
+        
 
         String[] words = text.split(" ");
         String reconstruct = "";
@@ -125,12 +128,15 @@ public class NormalizationLayer extends Layer {
     }
     
     private String convertNumbersToWords(String text){
-        text = StringReplacer.replace(text, Pattern.compile("\\d+"), (Matcher m) -> {
-            if (m.group().length() > 9) {
-                // Do not convert to prevent exceptions and large text numbers
-                return m.group();
+        text = StringReplacer.replace(text, Pattern.compile("\\d+"), new StringReplacerCallback() {
+            @Override
+            public String replace(Matcher m) {
+                if (m.group().length() > 9) {
+                    // Do not convert to prevent exceptions and large text numbers
+                    return m.group();
+                }
+                return EnglishNumberToWords.convert(Integer.parseInt(m.group()));
             }
-            return EnglishNumberToWords.convert(Integer.parseInt(m.group()));
         });
         return text;
     }

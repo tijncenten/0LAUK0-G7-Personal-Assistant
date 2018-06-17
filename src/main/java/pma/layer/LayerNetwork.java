@@ -1,5 +1,6 @@
 package pma.layer;
 
+import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -161,6 +162,20 @@ public class LayerNetwork implements Trainable, Storable {
             if (l instanceof Storable) {
                 Storable s = (Storable) l;
                 s.load(path, name);
+            }
+        }
+    }
+    
+    @Override
+    public void load(InputStream is) {
+        if (!isBuilt) {
+            throw new IllegalStateException("Layer network is not built yet");
+        }
+        
+        for (Layer l : layers) {
+            if (l instanceof Storable) {
+                Storable s = (Storable) l;
+                s.load(is);
             }
         }
     }

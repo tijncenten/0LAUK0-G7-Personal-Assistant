@@ -5,7 +5,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
@@ -113,19 +116,8 @@ public class BayesianEvaluation extends Evaluation implements Trainable, Storabl
             File file = new File("pa-network-storage/" + name + ".bayesian.txt");
             reader = new FileReader(file);
             BufferedReader bufferedReader = new BufferedReader(reader);
-            int count = Integer.parseInt(bufferedReader.readLine());
             
-            for (int i = 0; i < count; i++) {
-                String line = bufferedReader.readLine();
-                String[] parts = line.split("\\|");
-                String word = parts[1];
-                String[] counts = parts[2].split("/");
-                int matchCount = Integer.parseInt(counts[0]);
-                int nonMatchCount = Integer.parseInt(counts[1]);
-                WordProbability wp = new WordProbability(word, matchCount, nonMatchCount);
-                wp.setCategory(parts[0]);
-                wds.setWordProbability(wp);
-            }
+            this.load(bufferedReader);
             
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
@@ -137,6 +129,33 @@ public class BayesianEvaluation extends Evaluation implements Trainable, Storabl
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
+        }
+    }
+
+    @Override
+    public void load(InputStream is) {
+        try {
+            this.load(new BufferedReader(new InputStreamReader(is, "UTF-8")));
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(BayesianEvaluation.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(BayesianEvaluation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void load(BufferedReader bufferedReader) throws IOException {
+        int count = Integer.parseInt(bufferedReader.readLine());
+            
+        for (int i = 0; i < count; i++) {
+            String line = bufferedReader.readLine();
+            String[] parts = line.split("\\|");
+            String word = parts[1];
+            String[] counts = parts[2].split("/");
+            int matchCount = Integer.parseInt(counts[0]);
+            int nonMatchCount = Integer.parseInt(counts[1]);
+            WordProbability wp = new WordProbability(word, matchCount, nonMatchCount);
+            wp.setCategory(parts[0]);
+            wds.setWordProbability(wp);
         }
     }
 

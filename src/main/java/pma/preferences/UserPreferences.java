@@ -5,11 +5,18 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import pma.feedback.FeedbackListener;
 import pma.feedback.FeedbackModule;
 import pma.feedback.FeedbackModule.FeedbackType;
 import pma.feedback.request.BlockRateFeedbackRequest;
 import pma.feedback.request.FeedbackNumberFeedbackRequest;
+import pma.feedback.request.FeedbackRequest;
 import pma.feedback.request.ThreadDepthFeedbackRequest;
 import pma.layer.LayerNetwork;
 import pma.layer.Storable;
@@ -112,42 +119,51 @@ public class UserPreferences implements Storable {
     public void build(LayerNetwork network) {
         FeedbackModule fm = network.getFeedbackModule();
         
-        fm.addFeedbackListener(FeedbackType.BLOCK_RATE, (request) -> {
-            BlockRateFeedbackRequest req = (BlockRateFeedbackRequest) request;
-            int result = req.getResult();
-            switch (result) {
-            case 1:
-                increaseEvaluationThreshold();
-                break;
-            case -1:
-                decreaseEvaluationThreshold();
-                break;
+        fm.addFeedbackListener(FeedbackType.BLOCK_RATE, new FeedbackListener() {
+            @Override
+            public void ApplyFeedback(FeedbackRequest request) {
+                BlockRateFeedbackRequest req = (BlockRateFeedbackRequest) request;
+                int result = req.getResult();
+                switch (result) {
+                case 1:
+                    increaseEvaluationThreshold();
+                    break;
+                case -1:
+                    decreaseEvaluationThreshold();
+                    break;
+                }
             }
         });
         
-        fm.addFeedbackListener(FeedbackType.NR_FEEDBACK, (request) -> {
-            FeedbackNumberFeedbackRequest req = (FeedbackNumberFeedbackRequest) request;
-            int result = req.getResult();
-            switch (result) {
-            case 1:
-                increaseEvaluationUncertainty();
-                break;
-            case -1:
-                decreaseEvaluationUncertainty();
-                break;
+        fm.addFeedbackListener(FeedbackType.NR_FEEDBACK, new FeedbackListener() {
+            @Override
+            public void ApplyFeedback(FeedbackRequest request) {
+                FeedbackNumberFeedbackRequest req = (FeedbackNumberFeedbackRequest) request;
+                int result = req.getResult();
+                switch (result) {
+                case 1:
+                    increaseEvaluationUncertainty();
+                    break;
+                case -1:
+                    decreaseEvaluationUncertainty();
+                    break;
+                }
             }
         });
         
-        fm.addFeedbackListener(FeedbackType.THREAD_DEPTH, (request) -> {
-            ThreadDepthFeedbackRequest req = (ThreadDepthFeedbackRequest) request;
-            int result = req.getResult();
-            switch (result) {
-            case 1:
-                increaseThreadDepthFactor();
-                break;
-            case -1:
-                decreaseThreadDepthFactor();
-                break;
+        fm.addFeedbackListener(FeedbackType.THREAD_DEPTH, new FeedbackListener() {
+            @Override
+            public void ApplyFeedback(FeedbackRequest request) {
+                ThreadDepthFeedbackRequest req = (ThreadDepthFeedbackRequest) request;
+                int result = req.getResult();
+                switch (result) {
+                case 1:
+                    increaseThreadDepthFactor();
+                    break;
+                case -1:
+                    decreaseThreadDepthFactor();
+                    break;
+                }
             }
         });
     }
@@ -182,33 +198,8 @@ public class UserPreferences implements Storable {
             File file = new File("pa-network-storage/" + name + ".prefs.txt");
             reader = new FileReader(file);
             BufferedReader bufferedReader = new BufferedReader(reader);
-            String line;
             
-            while((line = bufferedReader.readLine()) != null) {
-                String[] lineSplit = line.split(":");
-                switch (lineSplit[0]) {
-                case "questionCategorizationPrefs":
-                    this.questionPrefs = CategorizationPrefs.valueOf(lineSplit[1]);
-                    break;
-                case "answerCategorizationPrefs":
-                    this.answerPrefs = CategorizationPrefs.valueOf(lineSplit[1]);
-                    break;
-                case "announcementCategorizationPrefs":
-                    this.announcementPrefs = CategorizationPrefs.valueOf(lineSplit[1]);
-                    break;
-                case "confirmationCategorizationPrefs":
-                    this.confirmationPrefs = CategorizationPrefs.valueOf(lineSplit[1]);
-                    break;
-                case "threadDepthFactor":
-                    this.threadDepthFactor = Double.parseDouble(lineSplit[1]);
-                    break;
-                case "evaluationThreshold":
-                    this.evaluationThreshold = Double.parseDouble(lineSplit[1]);
-                    break;
-                case "evaluationUncertainty":
-                    this.evaluationUncertainty = Double.parseDouble(lineSplit[1]);
-                }
-            }
+            this.load(bufferedReader);
             
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
@@ -219,6 +210,47 @@ public class UserPreferences implements Storable {
                 reader.close();
             } catch (IOException ex) {
                 ex.printStackTrace();
+            }
+        }
+    }
+    
+    @Override
+    public void load(InputStream is) {
+        try {
+            this.load(new BufferedReader(new InputStreamReader(is, "UTF-8")));
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(UserPreferences.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(UserPreferences.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void load(BufferedReader bufferedReader) throws IOException {
+        String line;
+            
+        while((line = bufferedReader.readLine()) != null) {
+            String[] lineSplit = line.split(":");
+            switch (lineSplit[0]) {
+            case "questionCategorizationPrefs":
+                this.questionPrefs = CategorizationPrefs.valueOf(lineSplit[1]);
+                break;
+            case "answerCategorizationPrefs":
+                this.answerPrefs = CategorizationPrefs.valueOf(lineSplit[1]);
+                break;
+            case "announcementCategorizationPrefs":
+                this.announcementPrefs = CategorizationPrefs.valueOf(lineSplit[1]);
+                break;
+            case "confirmationCategorizationPrefs":
+                this.confirmationPrefs = CategorizationPrefs.valueOf(lineSplit[1]);
+                break;
+            case "threadDepthFactor":
+                this.threadDepthFactor = Double.parseDouble(lineSplit[1]);
+                break;
+            case "evaluationThreshold":
+                this.evaluationThreshold = Double.parseDouble(lineSplit[1]);
+                break;
+            case "evaluationUncertainty":
+                this.evaluationUncertainty = Double.parseDouble(lineSplit[1]);
             }
         }
     }

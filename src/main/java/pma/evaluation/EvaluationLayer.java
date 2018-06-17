@@ -1,5 +1,6 @@
 package pma.evaluation;
 
+import java.io.InputStream;
 import pma.evaluation.function.EvaluationFunction;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -73,13 +74,15 @@ public class EvaluationLayer extends Layer implements Trainable, Storable {
     
     @Override
     public void build(LayerNetwork network) {
-        network.getFeedbackModule().addFeedbackListener(FeedbackType.MESSAGE_IMPORTANCE, (request) -> {
-            MessageFeedbackRequest req = (MessageFeedbackRequest) request;
-            Message message = new Message(req.getMessage(), req.isSpam());
-            List<Message> train = new ArrayList<>();
-            train.add(message);
-
-            this.train(train);
+        network.getFeedbackModule().addFeedbackListener(FeedbackType.MESSAGE_IMPORTANCE, new FeedbackListener() {
+            @Override
+            public void ApplyFeedback(FeedbackRequest request) {
+                MessageFeedbackRequest req = (MessageFeedbackRequest) request;
+                Message message = new Message(req.getMessage(), req.isSpam());
+                List<Message> train = new ArrayList<>();
+                train.add(message);
+                EvaluationLayer.this.train(train);
+            }
         });
     }
 
@@ -109,6 +112,16 @@ public class EvaluationLayer extends Layer implements Trainable, Storable {
             if (eval instanceof Storable) {
                 Storable s = (Storable) eval;
                 s.load(path, name);
+            }
+        }
+    }
+    
+    @Override
+    public void load(InputStream is) {
+        for (Evaluation eval : evaluations) {
+            if (eval instanceof Storable) {
+                Storable s = (Storable) eval;
+                s.load(is);
             }
         }
     }

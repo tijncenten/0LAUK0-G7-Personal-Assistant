@@ -2,6 +2,7 @@ package pma;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +36,8 @@ public class PersonalMessagingAssistant implements Trainable, Storable {
     private UserPreferences prefs = new UserPreferences();
     private FeedbackModule feedbackModule = new FeedbackModule();
     
+    private BayesianEvaluation bayesianEvaluation;
+    
     private final MessageParser parser;
     private final int batchSize;
     
@@ -61,8 +64,8 @@ public class PersonalMessagingAssistant implements Trainable, Storable {
         
         EvaluationFunction evalFunc = new AverageEvaluationFunction();
         EvaluationLayer evalLayer = new EvaluationLayer(evalFunc);
-        BayesianEvaluation evaluation = new BayesianEvaluation();
-        evalLayer.addEvaluation(evaluation);
+        bayesianEvaluation = new BayesianEvaluation();
+        evalLayer.addEvaluation(bayesianEvaluation);
         
         network.addLayer(evalLayer);
         network.addLayer(output);
@@ -73,7 +76,16 @@ public class PersonalMessagingAssistant implements Trainable, Storable {
     public void setFeedbackEvaluator(FeedbackEvaluator evaluator){
         feedbackModule.setFeedbackEvaluator(evaluator);
     }
-    protected EvalResult[] process(List<Message> messages) {
+    
+    public BayesianEvaluation getBayesianEvaluation() {
+        return this.bayesianEvaluation;
+    }
+    
+    public UserPreferences getUserPreferences() {
+        return this.prefs;
+    }
+    
+    public EvalResult[] process(List<Message> messages) {
         
         int numberOfMessages = messages.size();
 
@@ -131,6 +143,10 @@ public class PersonalMessagingAssistant implements Trainable, Storable {
     
     public EvalResult[] process(File f) throws ParseException, FileNotFoundException {
         return this.process(parser.parse(f));
+    }
+    
+    public EvalResult[] process(InputStream is) throws ParseException {
+        return this.process(parser.parse(is));
     }
     
     public static int[] calculateStatistics(List<Message> messages) {
@@ -220,5 +236,14 @@ public class PersonalMessagingAssistant implements Trainable, Storable {
         }
         network.load(path, name);
         prefs.load(path, name);
+    }
+    
+    @Override
+    public void load(InputStream is) {
+        if (network == null) {
+            throw new IllegalStateException("LayerNetwork 'network' is null");
+        }
+        network.load(is);
+        prefs.load(is);
     }
 }
